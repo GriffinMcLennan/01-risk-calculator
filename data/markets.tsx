@@ -79,7 +79,7 @@ const markets: Market[] = [
     avaxMarket,
     apeMarket,
     nearMarket,
-    solSquaredMarket,
+    // solSquaredMarket, TODO: FIX
 ];
 
 export type { Market };

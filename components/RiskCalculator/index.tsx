@@ -2,8 +2,10 @@ import { Flex, NumberInputFieldProps, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Accordion from "../Accordion";
 import { Collateral, collaterals } from "../../data/collaterals";
+import { markets } from "../../data/markets";
 import fetchPrices from "../../utils/api/fetchPrices";
 import CollateralRow from "../CollateralRow";
+import MarketRow from "../MarketRow";
 
 interface CollateralAmounts {
     USDC: number;
@@ -27,6 +29,16 @@ interface Prices {
     USDC: number;
     USDT: number;
     UST: number;
+}
+
+interface Markets {
+    SOL: number;
+    BTC: number;
+    ETH: number;
+    LUNA: number;
+    AVAX: number;
+    APE: number;
+    NEAR: number;
 }
 
 const RiskCalculator = () => {
@@ -78,6 +90,16 @@ const RiskCalculator = () => {
         mSOL: 10,
     });
 
+    const [marketAmounts, setMarketAmounts] = useState({
+        SOL: 0,
+        BTC: 0,
+        ETH: 0,
+        LUNA: 0,
+        AVAX: 0,
+        APE: 0,
+        NEAR: 0,
+    });
+
     const updateCollateralAmount = (key: string, newValue: number) => {
         const oldAmounts = { ...collateralAmounts };
 
@@ -109,6 +131,15 @@ const RiskCalculator = () => {
         const oldAmounts = { ...futurePrices };
 
         setFuturePrices({
+            ...oldAmounts,
+            [key]: newValue,
+        });
+    };
+
+    const updateMarketAmount = (key: string, newValue: number) => {
+        const oldAmounts = { ...marketAmounts };
+
+        setMarketAmounts({
             ...oldAmounts,
             [key]: newValue,
         });
@@ -161,7 +192,7 @@ const RiskCalculator = () => {
                         Asset
                     </Text>
                     <Text width="100px" mr="15px">
-                        Price
+                        Entry Price
                     </Text>
                     <Text width="100px" mr="15px">
                         Future Price
@@ -183,6 +214,36 @@ const RiskCalculator = () => {
                         onChangeBorrow={updateBorrowAmount}
                         onPriceChange={updatePriceAmount}
                         onFuturePriceChange={updateFuturePriceAmount}
+                    />
+                ))}
+            </Accordion>
+
+            {/* TODO: Fill in perps */}
+            <Accordion title="Perpetuals">
+                <Flex>
+                    <Text width="100px" mr="15px">
+                        Market
+                    </Text>
+                    <Text width="100px" mr="15px">
+                        Entry Price
+                    </Text>
+                    <Text width="100px" mr="15px">
+                        Future Price
+                    </Text>
+                    <Text width="100px" mr="15px">
+                        Position Size
+                    </Text>
+                </Flex>
+                {markets.map((market) => (
+                    <MarketRow
+                        key={market.symbol}
+                        market={market}
+                        amount={marketAmounts[market.symbol as keyof Markets]}
+                        price={prices[market.symbol as keyof Prices]}
+                        futurePrice={futurePrices[market.symbol as keyof Prices]}
+                        onPriceChange={updatePriceAmount}
+                        onFuturePriceChange={updateFuturePriceAmount}
+                        onAmountChange={updateMarketAmount}
                     />
                 ))}
             </Accordion>
