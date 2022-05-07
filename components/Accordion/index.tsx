@@ -9,7 +9,7 @@ const Accordion = ({ title, children }: any) => {
         <Flex flexDirection="column">
             <Flex width="40vw" cursor="pointer" alignItems="center" onClick={() => setExpanded((b) => !b)}>
                 {expanded ? <FaChevronUp /> : <FaChevronDown />}
-                <Text ml="5px">Collaterals</Text>
+                <Text ml="5px">{title}</Text>
             </Flex>
             <Flex display={expanded ? "flex" : "none"} flexDirection="column">
                 {children}
