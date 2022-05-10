@@ -59,7 +59,6 @@ const MarketRow = ({
                 customInput={Input}
                 mr="15px"
                 width="150px"
-                // variant="unstyled"
                 value={amountStr}
                 placeholder="0.0"
                 thousandSeparator

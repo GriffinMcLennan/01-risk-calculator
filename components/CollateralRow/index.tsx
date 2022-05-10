@@ -2,6 +2,7 @@ import { Text, Flex, Input } from "@chakra-ui/react";
 import { Collateral } from "../../data/collaterals";
 import NumberFormat from "react-number-format";
 import { useState } from "react";
+import { useTheme } from "@chakra-ui/react";
 
 interface Props {
     collateral: Collateral;
@@ -27,10 +28,11 @@ const CollateralRow = ({
     const [collateralVal, setCollateralVal] = useState("");
     const [borrowVal, setBorrowVal] = useState("");
     const disabled = collateral.symbol === "USDC" || collateral.symbol === "USDT" || collateral.symbol === "UST";
+    const { textColors } = useTheme();
 
     return (
         <Flex alignItems="center" my="10px">
-            <Text width="100px" mr="15px">
+            <Text variant="primary" width="100px" mr="15px">
                 {collateral.symbol}
             </Text>
 
@@ -38,6 +40,7 @@ const CollateralRow = ({
                 customInput={Input}
                 mr="15px"
                 width="100px"
+                color={textColors.primary}
                 value={price}
                 placeholder="0.0"
                 disabled={disabled}
@@ -53,7 +56,7 @@ const CollateralRow = ({
                 width="100px"
                 value={futurePrice}
                 placeholder="0.0"
-                color={disabled ? "" : futurePrice >= price ? "green.400" : "red.600"}
+                color={disabled ? textColors.primary : futurePrice >= price ? "green.400" : "red.600"}
                 disabled={collateral.symbol === "USDC" || collateral.symbol === "USDT" || collateral.symbol === "UST"}
                 onValueChange={(values) => {
                     const { floatValue, formattedValue } = values;
@@ -65,7 +68,7 @@ const CollateralRow = ({
                 customInput={Input}
                 mr="15px"
                 width="150px"
-                // variant="unstyled"
+                color={textColors.primary}
                 value={collateralVal}
                 placeholder="0.0"
                 thousandSeparator
@@ -79,7 +82,7 @@ const CollateralRow = ({
             <NumberFormat
                 customInput={Input}
                 width="150px"
-                // variant="unstyled"
+                color={textColors.primary}
                 value={borrowVal}
                 placeholder="0.0"
                 thousandSeparator

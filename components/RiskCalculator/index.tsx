@@ -184,24 +184,28 @@ const RiskCalculator = () => {
 
     return (
         <Flex flexDirection="column" alignItems="center">
-            <Text>Risk Calculator</Text>
+            <Text variant="primary" fontSize="22px">
+                01 Exchange Risk Calculator
+            </Text>
 
             <Accordion title="Collateral and Borrows">
                 <Flex>
-                    <Text width="100px" mr="15px">
+                    <Text variant="primary" width="100px" mr="15px">
                         Asset
                     </Text>
-                    <Text width="100px" mr="15px">
+                    <Text variant="primary" width="100px" mr="15px">
                         Entry Price
                     </Text>
-                    <Text width="100px" mr="15px">
+                    <Text variant="primary" width="100px" mr="15px">
                         Future Price
                     </Text>
 
-                    <Text width="150px" mr="15px">
+                    <Text variant="primary" width="150px" mr="15px">
                         Deposited
                     </Text>
-                    <Text width="150px">Borrowed</Text>
+                    <Text variant="primary" width="150px">
+                        Borrowed
+                    </Text>
                 </Flex>
                 {collaterals.map((collateral) => (
                     <CollateralRow
