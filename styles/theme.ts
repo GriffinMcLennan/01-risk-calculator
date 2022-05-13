@@ -4,7 +4,7 @@ import { TextStyles as Text } from "./components/ButtonStyles";
 export const darkTheme = extendTheme({
     colors: {
         primary: "#121212",
-        secondary: "rgba(255, 255, 255, 0.02)",
+        secondary: "rgba(255, 255, 255, 0.06)",
         tertiary: "rgba(255, 255, 255, 0.2)",
     },
 

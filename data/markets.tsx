@@ -71,16 +71,16 @@ const solSquaredMarket: Market = {
     symbol: "SOL^2",
 };
 
-const markets: Market[] = [
-    solMarket,
-    btcMarket,
-    lunaMarket,
-    ethMarket,
-    avaxMarket,
-    apeMarket,
-    nearMarket,
+const markets = {
+    SOL: solMarket,
+    BTC: btcMarket,
+    LUNA: lunaMarket,
+    ETH: ethMarket,
+    AVAX: avaxMarket,
+    APE: apeMarket,
+    NEAR: nearMarket,
     // solSquaredMarket, TODO: FIX
-];
+};
 
 export type { Market };
 export { markets };

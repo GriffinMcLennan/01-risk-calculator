@@ -17,7 +17,6 @@ interface Props {
 
 const CollateralRow = ({
     collateral,
-    amount,
     price,
     futurePrice,
     onChangeCollateral,

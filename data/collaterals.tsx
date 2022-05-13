@@ -51,15 +51,15 @@ const msolCollateral: Collateral = {
     maxDeposit: 1_000,
 };
 
-const collaterals: Collateral[] = [
-    usdcCollateral,
-    usdtCollateral,
-    ustCollateral,
-    solCollateral,
-    btcCollateral,
-    ethCollateral,
-    msolCollateral,
-];
+const collaterals = {
+    USDC: usdcCollateral,
+    USDT: usdtCollateral,
+    UST: ustCollateral,
+    SOL: solCollateral,
+    BTC: btcCollateral,
+    ETH: ethCollateral,
+    mSOL: msolCollateral,
+};
 
 export type { Collateral };
 export { collaterals };

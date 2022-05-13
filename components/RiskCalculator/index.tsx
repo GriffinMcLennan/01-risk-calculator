@@ -1,4 +1,4 @@
-import { Flex, NumberInputFieldProps, Text } from "@chakra-ui/react";
+import { Flex, Tooltip, Text, ColorModeScript, color } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Accordion from "../Accordion";
 import { Collateral, collaterals } from "../../data/collaterals";
@@ -6,6 +6,13 @@ import { markets } from "../../data/markets";
 import fetchPrices from "../../utils/api/fetchPrices";
 import CollateralRow from "../CollateralRow";
 import MarketRow from "../MarketRow";
+import totalAccountValue from "../../math/totalAccountValue";
+import totalNotionalValue from "../../math/totalNotionalValue";
+import maintenanceMarginFactor from "../../math/maintenanceMarginFactor";
+import theoreticalTotalAccountValue from "../../math/theoreticalTotalAccountValue";
+import theoreticalTotalNotionalValue from "../../math/theoreticalTotalNotionalValue";
+import theoreticalMaintenanceMarginFactor from "../../math/theoreticalMaintenanceMarginFactor";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 interface CollateralAmounts {
     USDC: number;
@@ -77,7 +84,7 @@ const RiskCalculator = () => {
         SOL: 0,
         BTC: 0,
         ETH: 0,
-        mSOL: 10,
+        mSOL: 0,
     });
 
     const [borrowAmounts, setBorrowAmounts] = useState({
@@ -87,7 +94,7 @@ const RiskCalculator = () => {
         SOL: 0,
         BTC: 0,
         ETH: 0,
-        mSOL: 10,
+        mSOL: 0,
     });
 
     const [marketAmounts, setMarketAmounts] = useState({
@@ -99,6 +106,102 @@ const RiskCalculator = () => {
         APE: 0,
         NEAR: 0,
     });
+
+    // console.log("Collateral amounts:", collateralAmounts);
+    // console.log("Borrow amounts:", borrowAmounts);
+    // console.log("Market amounts:", marketAmounts);
+
+    const TAV = totalAccountValue(collateralAmounts, borrowAmounts, marketAmounts, prices, futurePrices);
+    const TNV = totalNotionalValue(borrowAmounts, marketAmounts, futurePrices);
+    const MF = TAV / TNV;
+
+    // console.log(TAV, TNV, MF);
+
+    const MMF = maintenanceMarginFactor(borrowAmounts, marketAmounts, futurePrices, TNV);
+
+    const accountRisk = Math.abs((Math.log(Math.min(1, MF)) / Math.log(MMF)) * 100);
+    // console.log("MF, MMF, Account Risk:", MF, MMF, accountRisk);
+
+    const calculateLiquidation = (key: string) => {
+        let totalDirectional =
+            (key in marketAmounts && marketAmounts[key]) - (key in borrowAmounts && borrowAmounts[key]);
+        // changes in this token don't have any delta => impossible to liquidate
+        if (totalDirectional === 0 || accountRisk >= 100) return -1;
+
+        // console.log("totalDirectional:", totalDirectional);
+
+        let low = 0.0;
+        let high = 200_000.0;
+
+        while (Math.abs(high - low) > 0.001) {
+            let theoreticalPrice = (low + high) / 2;
+
+            const theoreticalTAV = theoreticalTotalAccountValue(
+                collateralAmounts,
+                borrowAmounts,
+                marketAmounts,
+                prices,
+                futurePrices,
+                key,
+                theoreticalPrice
+            );
+            const theoreticalTNV = theoreticalTotalNotionalValue(
+                borrowAmounts,
+                marketAmounts,
+                futurePrices,
+                key,
+                theoreticalPrice
+            );
+
+            // console.log("Price: ", theoreticalPrice, "TAV: ", theoreticalTAV, "TNV ", theoreticalTNV);
+
+            const theoreticalMF = Math.min(1, Math.abs(theoreticalTAV / theoreticalTNV));
+            const theoreticalMMF = theoreticalMaintenanceMarginFactor(
+                borrowAmounts,
+                marketAmounts,
+                futurePrices,
+                theoreticalTNV,
+                key,
+                theoreticalPrice
+            );
+
+            // console.log(
+            //     "Price: ",
+            //     theoreticalPrice,
+            //     "theoreticalMF: ",
+            //     Math.abs(theoreticalMF),
+            //     "TheoreticalMMF: ",
+            //     theoreticalMMF,
+            //     "Ratio: ",
+            //     theoreticalMF / theoreticalMMF
+            // );
+
+            if (Math.abs(theoreticalMF) < Math.abs(theoreticalMMF)) {
+                if (totalDirectional > 0) {
+                    low = theoreticalPrice;
+                } else {
+                    high = theoreticalPrice;
+                }
+            } else {
+                if (totalDirectional > 0) {
+                    high = theoreticalPrice;
+                } else {
+                    low = theoreticalPrice;
+                }
+            }
+        }
+
+        return low;
+    };
+
+    console.log("SOL Liquidation:", calculateLiquidation("SOL"));
+    console.log("BTC Liquidation:", calculateLiquidation("BTC"));
+    console.log("ETH Liquidation:", calculateLiquidation("ETH"));
+    console.log("mSOL Liquidation:", calculateLiquidation("mSOL"));
+    console.log("LUNA Liquidation:", calculateLiquidation("LUNA"));
+    console.log("AVAX Liquidation:", calculateLiquidation("AVAX"));
+    console.log("APE Liquidation:", calculateLiquidation("APE"));
+    console.log("NEAR Liquidation:", calculateLiquidation("NEAR"));
 
     const updateCollateralAmount = (key: string, newValue: number) => {
         const oldAmounts = { ...collateralAmounts };
@@ -148,7 +251,6 @@ const RiskCalculator = () => {
     useEffect(() => {
         const initializePrices = async () => {
             const priceObj = await fetchPrices();
-            console.log("Running");
 
             setPrices({
                 SOL: priceObj["solana"].usd,
@@ -207,7 +309,7 @@ const RiskCalculator = () => {
                         Borrowed
                     </Text>
                 </Flex>
-                {collaterals.map((collateral) => (
+                {Object.entries(collaterals).map(([key, collateral]) => (
                     <CollateralRow
                         key={collateral.symbol}
                         collateral={collateral}
@@ -222,23 +324,29 @@ const RiskCalculator = () => {
                 ))}
             </Accordion>
 
-            {/* TODO: Fill in perps */}
             <Accordion title="Perpetuals">
                 <Flex>
-                    <Text width="100px" mr="15px">
+                    <Text variant="secondary" width="100px" mr="15px">
                         Market
                     </Text>
-                    <Text width="100px" mr="15px">
+                    <Text variant="secondary" width="100px" mr="15px">
                         Entry Price
                     </Text>
-                    <Text width="100px" mr="15px">
+                    <Text variant="secondary" width="100px" mr="15px">
                         Future Price
                     </Text>
-                    <Text width="100px" mr="15px">
-                        Position Size
-                    </Text>
+                    <Flex alignItems="center">
+                        <Text variant="secondary" width="100px" mr="15px">
+                            Position Size
+                        </Text>
+                        <Tooltip hasArrow label="For short positions set position size to negative.">
+                            <span>
+                                <AiOutlineInfoCircle color="white" />
+                            </span>
+                        </Tooltip>
+                    </Flex>
                 </Flex>
-                {markets.map((market) => (
+                {Object.entries(markets).map(([key, market]) => (
                     <MarketRow
                         key={market.symbol}
                         market={market}

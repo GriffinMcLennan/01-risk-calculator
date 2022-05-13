@@ -1,4 +1,4 @@
-import { Flex, Input, Text } from "@chakra-ui/react";
+import { Flex, Input, Text, useTheme } from "@chakra-ui/react";
 import { useState } from "react";
 import NumberFormat from "react-number-format";
 import { Market } from "../../data/markets";
@@ -23,15 +23,17 @@ const MarketRow = ({
     onAmountChange,
 }: Props) => {
     const [amountStr, setAmountStr] = useState("");
+    const { textColors } = useTheme();
 
     return (
         <Flex alignItems="center" my="10px">
-            <Text width="100px" mr="15px">
+            <Text variant="primary" width="100px" mr="15px">
                 {market.symbol}
             </Text>
 
             <NumberFormat
                 customInput={Input}
+                color={textColors.primary}
                 mr="15px"
                 width="100px"
                 value={price}
@@ -57,6 +59,7 @@ const MarketRow = ({
 
             <NumberFormat
                 customInput={Input}
+                color={textColors.primary}
                 mr="15px"
                 width="150px"
                 value={amountStr}
