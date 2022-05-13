@@ -10,6 +10,9 @@ interface Market {
 
     /** The symbol that represents the market token */
     symbol: string;
+
+    /** The path to the image file */
+    imgURL: string;
 }
 
 /// Technically all of the non-squared markets currently have the same IMF and MMF, however, in case this changes in the future
@@ -20,6 +23,7 @@ const solMarket: Market = {
     baseIMF: 0.1,
     baseMMF: 0.05,
     symbol: "SOL",
+    imgURL: "/solana.svg",
 };
 
 const btcMarket: Market = {
@@ -27,13 +31,16 @@ const btcMarket: Market = {
     baseIMF: 0.1,
     baseMMF: 0.05,
     symbol: "BTC",
+    imgURL: "/bitcoin.svg",
 };
 
+// deleted for now
 const lunaMarket: Market = {
     name: "Luna",
     baseIMF: 0.1,
     baseMMF: 0.05,
     symbol: "LUNA",
+    imgURL: "",
 };
 
 const ethMarket: Market = {
@@ -41,6 +48,7 @@ const ethMarket: Market = {
     baseIMF: 0.1,
     baseMMF: 0.05,
     symbol: "ETH",
+    imgURL: "/ethereum.svg",
 };
 
 const avaxMarket: Market = {
@@ -48,6 +56,7 @@ const avaxMarket: Market = {
     baseIMF: 0.1,
     baseMMF: 0.05,
     symbol: "AVAX",
+    imgURL: "/avalanche.svg",
 };
 
 const apeMarket: Market = {
@@ -55,6 +64,7 @@ const apeMarket: Market = {
     baseIMF: 0.1,
     baseMMF: 0.05,
     symbol: "APE",
+    imgURL: "/ape.png",
 };
 
 const nearMarket: Market = {
@@ -62,6 +72,7 @@ const nearMarket: Market = {
     baseIMF: 0.1,
     baseMMF: 0.05,
     symbol: "NEAR",
+    imgURL: "/near.png",
 };
 
 const solSquaredMarket: Market = {
@@ -69,12 +80,13 @@ const solSquaredMarket: Market = {
     baseIMF: 1,
     baseMMF: 0.5,
     symbol: "SOL^2",
+    imgURL: "/solana.svg",
 };
 
 const markets = {
     SOL: solMarket,
     BTC: btcMarket,
-    LUNA: lunaMarket,
+    // LUNA: lunaMarket, Removed for now
     ETH: ethMarket,
     AVAX: avaxMarket,
     APE: apeMarket,

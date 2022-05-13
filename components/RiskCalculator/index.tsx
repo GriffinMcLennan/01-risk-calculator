@@ -13,11 +13,12 @@ import theoreticalTotalAccountValue from "../../math/theoreticalTotalAccountValu
 import theoreticalTotalNotionalValue from "../../math/theoreticalTotalNotionalValue";
 import theoreticalMaintenanceMarginFactor from "../../math/theoreticalMaintenanceMarginFactor";
 import { AiOutlineInfoCircle } from "react-icons/ai";
+import Image from "next/image";
 
 interface CollateralAmounts {
     USDC: number;
     USDT: number;
-    UST: number;
+    // UST: number;
     SOL: number;
     BTC: number;
     ETH: number;
@@ -27,7 +28,7 @@ interface CollateralAmounts {
 interface Prices {
     SOL: number;
     BTC: number;
-    LUNA: number;
+    // LUNA: number;
     APE: number;
     mSOL: number;
     NEAR: number;
@@ -35,14 +36,14 @@ interface Prices {
     AVAX: number;
     USDC: number;
     USDT: number;
-    UST: number;
+    // UST: number;
 }
 
 interface Markets {
     SOL: number;
     BTC: number;
     ETH: number;
-    LUNA: number;
+    // LUNA: number;
     AVAX: number;
     APE: number;
     NEAR: number;
@@ -54,7 +55,7 @@ const RiskCalculator = () => {
     const [prices, setPrices] = useState<Prices>({
         SOL: 0,
         BTC: 0,
-        LUNA: 0,
+        // LUNA: 0,
         APE: 0,
         mSOL: 0,
         NEAR: 0,
@@ -62,13 +63,13 @@ const RiskCalculator = () => {
         AVAX: 0,
         USDC: 1,
         USDT: 1,
-        UST: 1,
+        // UST: 1,
     });
 
     const [futurePrices, setFuturePrices] = useState<Prices>({
         SOL: 0,
         BTC: 0,
-        LUNA: 0,
+        // LUNA: 0,
         APE: 0,
         mSOL: 0,
         NEAR: 0,
@@ -76,13 +77,13 @@ const RiskCalculator = () => {
         AVAX: 0,
         USDC: 1,
         USDT: 1,
-        UST: 1,
+        // UST: 1,
     });
 
     const [collateralAmounts, setCollateralAmounts] = useState<CollateralAmounts>({
         USDC: 0,
         USDT: 0,
-        UST: 0,
+        // UST: 0,
         SOL: 0,
         BTC: 0,
         ETH: 0,
@@ -92,7 +93,7 @@ const RiskCalculator = () => {
     const [borrowAmounts, setBorrowAmounts] = useState({
         USDC: 0,
         USDT: 0,
-        UST: 0,
+        // UST: 0,
         SOL: 0,
         BTC: 0,
         ETH: 0,
@@ -103,7 +104,7 @@ const RiskCalculator = () => {
         SOL: 0,
         BTC: 0,
         ETH: 0,
-        LUNA: 0,
+        // LUNA: 0,
         AVAX: 0,
         APE: 0,
         NEAR: 0,
@@ -197,6 +198,8 @@ const RiskCalculator = () => {
         return low;
     };
 
+    // TODO: Add maximum price for liquidations... similar to -1 special value for no shortside liquidation
+
     // console.log("SOL Liquidation:", calculateLiquidation("SOL"));
     // console.log("BTC Liquidation:", calculateLiquidation("BTC"));
     // console.log("ETH Liquidation:", calculateLiquidation("ETH"));
@@ -258,7 +261,7 @@ const RiskCalculator = () => {
             setPrices({
                 SOL: priceObj["solana"].usd,
                 BTC: priceObj["bitcoin"].usd,
-                LUNA: priceObj["terra-luna"].usd,
+                // LUNA: priceObj["terra-luna"].usd,
                 APE: priceObj["apecoin"].usd,
                 mSOL: priceObj["msol"].usd,
                 NEAR: priceObj["near"].usd,
@@ -266,13 +269,13 @@ const RiskCalculator = () => {
                 AVAX: priceObj["avalanche-2"].usd,
                 USDC: 1,
                 USDT: 1,
-                UST: 1,
+                // UST: 1,
             });
 
             setFuturePrices({
                 SOL: priceObj["solana"].usd,
                 BTC: priceObj["bitcoin"].usd,
-                LUNA: priceObj["terra-luna"].usd,
+                // LUNA: priceObj["terra-luna"].usd,
                 APE: priceObj["apecoin"].usd,
                 mSOL: priceObj["msol"].usd,
                 NEAR: priceObj["near"].usd,
@@ -280,7 +283,7 @@ const RiskCalculator = () => {
                 AVAX: priceObj["avalanche-2"].usd,
                 USDC: 1,
                 USDT: 1,
-                UST: 1,
+                // UST: 1,
             });
         };
 
@@ -289,13 +292,13 @@ const RiskCalculator = () => {
 
     return (
         <Flex flexDirection="column" alignItems="center">
-            <Text variant="primary" fontSize="22px">
+            <Text variant="primary" fontSize="32px" mt="20px" fontWeight="600">
                 01 Exchange Risk Calculator
             </Text>
 
             <Accordion title="Collateral and Borrows">
                 <Flex>
-                    <Text variant="secondary" width="100px" mr="15px">
+                    <Text variant="secondary" width="120px" mr="15px">
                         Asset
                     </Text>
                     <Text variant="secondary" width="100px" mr="15px">
@@ -341,20 +344,20 @@ const RiskCalculator = () => {
 
             <Accordion title="Perpetuals">
                 <Flex>
-                    <Text variant="secondary" width="100px" mr="15px">
+                    <Text variant="secondary" width="135px" mr="15px">
                         Market
                     </Text>
-                    <Text variant="secondary" width="100px" mr="15px">
+                    <Text variant="secondary" width="150px" mr="11px">
                         Entry Price
                     </Text>
-                    <Text variant="secondary" width="100px" mr="15px">
+                    <Text variant="secondary" width="150px" mr="11px">
                         Future Price
                     </Text>
-                    <Text variant="secondary" width="100px" mr="15px">
+                    <Text variant="secondary" width="150px" mr="11px">
                         Liq. Price
                     </Text>
 
-                    <Flex alignItems="center" width="150px" mr="15px">
+                    <Flex alignItems="center" width="150px" mr="11px">
                         <Text variant="secondary" mr="15px">
                             Position Size
                         </Text>

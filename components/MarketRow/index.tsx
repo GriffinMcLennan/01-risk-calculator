@@ -1,4 +1,4 @@
-import { ColorModeScript, Flex, Input, Text, useTheme } from "@chakra-ui/react";
+import { Image, Flex, Input, Text, useTheme } from "@chakra-ui/react";
 import { useState } from "react";
 import NumberFormat from "react-number-format";
 import { Market } from "../../data/markets";
@@ -32,7 +32,14 @@ const MarketRow = ({
 
     return (
         <Flex alignItems="center" my="10px">
-            <Text variant="secondary" width="100px" mr="15px">
+            <Image
+                src={market.imgURL}
+                height="25px"
+                width="25px"
+                borderRadius={market.symbol === "NEAR" ? "50%" : "0px"}
+                alt={market.symbol}
+            />
+            <Text variant="secondary" width="100px" ml="10px" mr="15px">
                 {market.symbol}
             </Text>
 
@@ -40,7 +47,7 @@ const MarketRow = ({
                 customInput={Input}
                 color={textColors.secondary}
                 mr="15px"
-                width="100px"
+                width="145px"
                 value={price}
                 placeholder="0.0"
                 onValueChange={(values) => {
@@ -52,7 +59,7 @@ const MarketRow = ({
             <NumberFormat
                 customInput={Input}
                 mr="15px"
-                width="100px"
+                width="145px"
                 color={futurePrice >= price ? "green.400" : "red.600"}
                 value={futurePrice}
                 placeholder="0.0"
@@ -67,7 +74,7 @@ const MarketRow = ({
                 color={textColors.primary}
                 disabled
                 mr="15px"
-                width="100px"
+                width="145px"
                 value={liqPrice === -1 ? "" : liqPrice.toFixed(2)}
                 placeholder="-"
             />

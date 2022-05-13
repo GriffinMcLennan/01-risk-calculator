@@ -3,6 +3,7 @@ import { Collateral } from "../../data/collaterals";
 import NumberFormat from "react-number-format";
 import { useState } from "react";
 import { useTheme } from "@chakra-ui/react";
+import Image from "next/image";
 
 interface Props {
     collateral: Collateral;
@@ -36,7 +37,8 @@ const CollateralRow = ({
 
     return (
         <Flex alignItems="center" my="10px">
-            <Text variant="secondary" width="100px" mr="15px">
+            <Image src={collateral.imgURL} height="25px" width="25px" alt={collateral.symbol} />
+            <Text variant="secondary" width="100px" ml="10px">
                 {collateral.symbol}
             </Text>
 
