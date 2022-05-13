@@ -78,7 +78,7 @@ const MarketRow = ({
             <NumberFormat
                 customInput={Input}
                 disabled
-                prefix={isNegative ? "-$ " : "$ "}
+                prefix={isNegative ? "-$" : "$"}
                 color={textColors.secondary}
                 mr="15px"
                 width="150px"

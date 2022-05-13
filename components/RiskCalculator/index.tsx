@@ -318,12 +318,12 @@ const RiskCalculator = () => {
                     <CollateralRow
                         key={collateral.symbol}
                         collateral={collateral}
-                        value={
+                        value={(
                             collateralAmounts[collateral.symbol as keyof CollateralAmounts] *
                                 futurePrices[collateral.symbol as keyof CollateralAmounts] -
                             borrowAmounts[collateral.symbol as keyof CollateralAmounts] *
                                 futurePrices[collateral.symbol as keyof CollateralAmounts]
-                        }
+                        ).toFixed(2)}
                         price={prices[collateral.symbol as keyof Prices]}
                         futurePrice={futurePrices[collateral.symbol as keyof Prices]}
                         onChangeCollateral={updateCollateralAmount}

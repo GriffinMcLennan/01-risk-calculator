@@ -6,7 +6,7 @@ import { useTheme } from "@chakra-ui/react";
 
 interface Props {
     collateral: Collateral;
-    value: number;
+    value: string;
     price: number;
     futurePrice: number;
     onChangeCollateral: (key: string, newValue: number) => void;
@@ -29,6 +29,8 @@ const CollateralRow = ({
     const [borrowVal, setBorrowVal] = useState("");
     const disabled = collateral.symbol === "USDC" || collateral.symbol === "USDT" || collateral.symbol === "UST";
     const { textColors } = useTheme();
+    const isNegative = Number(value) < 0;
+    const transformedValue = isNegative ? -Number(value) : value;
 
     return (
         <Flex alignItems="center" my="10px">
@@ -99,12 +101,12 @@ const CollateralRow = ({
             />
 
             <NumberFormat
-                prefix="$ "
+                prefix={isNegative ? "-$" : "$"}
                 customInput={Input}
                 width="150px"
                 color={textColors.secondary}
                 disabled
-                value={value}
+                value={transformedValue}
                 placeholder="0.0"
                 thousandSeparator
             />
