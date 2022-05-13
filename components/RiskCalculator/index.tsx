@@ -303,6 +303,9 @@ const RiskCalculator = () => {
                     <Text variant="secondary" width="100px" mr="15px">
                         Future Price
                     </Text>
+                    <Text variant="secondary" width="100px" mr="15px">
+                        Liq. Price
+                    </Text>
 
                     <Text variant="secondary" width="150px" mr="15px">
                         Deposited
@@ -326,6 +329,7 @@ const RiskCalculator = () => {
                         ).toFixed(2)}
                         price={prices[collateral.symbol as keyof Prices]}
                         futurePrice={futurePrices[collateral.symbol as keyof Prices]}
+                        liqPrice={calculateLiquidation(collateral.symbol)}
                         onChangeCollateral={updateCollateralAmount}
                         onChangeBorrow={updateBorrowAmount}
                         onPriceChange={updatePriceAmount}

@@ -9,6 +9,7 @@ interface Props {
     value: string;
     price: number;
     futurePrice: number;
+    liqPrice: number;
     onChangeCollateral: (key: string, newValue: number) => void;
     onChangeBorrow: (key: string, newValue: number) => void;
     onPriceChange: (key: string, newValue: number) => void;
@@ -20,6 +21,7 @@ const CollateralRow = ({
     value,
     price,
     futurePrice,
+    liqPrice,
     onChangeCollateral,
     onChangeBorrow,
     onPriceChange,
@@ -66,6 +68,17 @@ const CollateralRow = ({
                     const { floatValue } = values;
                     onFuturePriceChange(collateral.symbol, floatValue ?? 0);
                 }}
+            />
+
+            <NumberFormat
+                customInput={Input}
+                width="100px"
+                mr="15px"
+                color={textColors.secondary}
+                disabled
+                value={liqPrice === -1 ? "" : liqPrice.toFixed(2)}
+                placeholder="-"
+                thousandSeparator
             />
 
             <NumberFormat
