@@ -1,4 +1,4 @@
-import { Flex, Tooltip, Text, ColorModeScript, color } from "@chakra-ui/react";
+import { Flex, Tooltip, Text, ColorModeScript, useTheme } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Accordion from "../Accordion";
 import { Collateral, collaterals } from "../../data/collaterals";
@@ -49,6 +49,8 @@ interface Markets {
 }
 
 const RiskCalculator = () => {
+    const { textColors } = useTheme();
+
     const [prices, setPrices] = useState<Prices>({
         SOL: 0,
         BTC: 0,
@@ -292,20 +294,20 @@ const RiskCalculator = () => {
 
             <Accordion title="Collateral and Borrows">
                 <Flex>
-                    <Text variant="primary" width="100px" mr="15px">
+                    <Text variant="secondary" width="100px" mr="15px">
                         Asset
                     </Text>
-                    <Text variant="primary" width="100px" mr="15px">
+                    <Text variant="secondary" width="100px" mr="15px">
                         Entry Price
                     </Text>
-                    <Text variant="primary" width="100px" mr="15px">
+                    <Text variant="secondary" width="100px" mr="15px">
                         Future Price
                     </Text>
 
-                    <Text variant="primary" width="150px" mr="15px">
+                    <Text variant="secondary" width="150px" mr="15px">
                         Deposited
                     </Text>
-                    <Text variant="primary" width="150px">
+                    <Text variant="secondary" width="150px">
                         Borrowed
                     </Text>
                 </Flex>
@@ -341,7 +343,7 @@ const RiskCalculator = () => {
                         </Text>
                         <Tooltip hasArrow label="For short positions set position size to negative.">
                             <span>
-                                <AiOutlineInfoCircle color="white" />
+                                <AiOutlineInfoCircle color={textColors.secondary} />
                             </span>
                         </Tooltip>
                     </Flex>

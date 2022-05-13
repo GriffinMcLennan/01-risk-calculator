@@ -27,13 +27,13 @@ const MarketRow = ({
 
     return (
         <Flex alignItems="center" my="10px">
-            <Text variant="primary" width="100px" mr="15px">
+            <Text variant="secondary" width="100px" mr="15px">
                 {market.symbol}
             </Text>
 
             <NumberFormat
                 customInput={Input}
-                color={textColors.primary}
+                color={textColors.secondary}
                 mr="15px"
                 width="100px"
                 value={price}
@@ -59,7 +59,7 @@ const MarketRow = ({
 
             <NumberFormat
                 customInput={Input}
-                color={textColors.primary}
+                color={textColors.secondary}
                 mr="15px"
                 width="150px"
                 value={amountStr}

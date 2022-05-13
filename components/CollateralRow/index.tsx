@@ -31,7 +31,7 @@ const CollateralRow = ({
 
     return (
         <Flex alignItems="center" my="10px">
-            <Text variant="primary" width="100px" mr="15px">
+            <Text variant="secondary" width="100px" mr="15px">
                 {collateral.symbol}
             </Text>
 
@@ -39,12 +39,12 @@ const CollateralRow = ({
                 customInput={Input}
                 mr="15px"
                 width="100px"
-                color={textColors.primary}
+                color={textColors.secondary}
                 value={price}
                 placeholder="0.0"
                 disabled={disabled}
                 onValueChange={(values) => {
-                    const { floatValue, formattedValue } = values;
+                    const { floatValue } = values;
                     onPriceChange(collateral.symbol, floatValue ?? 0);
                 }}
             />
@@ -55,10 +55,10 @@ const CollateralRow = ({
                 width="100px"
                 value={futurePrice}
                 placeholder="0.0"
-                color={disabled ? textColors.primary : futurePrice >= price ? "green.400" : "red.600"}
+                color={disabled ? textColors.secondary : futurePrice >= price ? "green.400" : "red.600"}
                 disabled={collateral.symbol === "USDC" || collateral.symbol === "USDT" || collateral.symbol === "UST"}
                 onValueChange={(values) => {
-                    const { floatValue, formattedValue } = values;
+                    const { floatValue } = values;
                     onFuturePriceChange(collateral.symbol, floatValue ?? 0);
                 }}
             />
@@ -67,7 +67,7 @@ const CollateralRow = ({
                 customInput={Input}
                 mr="15px"
                 width="150px"
-                color={textColors.primary}
+                color={textColors.secondary}
                 value={collateralVal}
                 placeholder="0.0"
                 thousandSeparator
@@ -81,7 +81,7 @@ const CollateralRow = ({
             <NumberFormat
                 customInput={Input}
                 width="150px"
-                color={textColors.primary}
+                color={textColors.secondary}
                 value={borrowVal}
                 placeholder="0.0"
                 thousandSeparator
