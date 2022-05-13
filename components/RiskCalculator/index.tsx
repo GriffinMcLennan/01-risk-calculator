@@ -345,8 +345,8 @@ const RiskCalculator = () => {
                     <Text variant="secondary" width="100px" mr="15px">
                         Future Price
                     </Text>
-                    <Flex alignItems="center">
-                        <Text variant="secondary" width="100px" mr="15px">
+                    <Flex alignItems="center" width="150px" mr="15px">
+                        <Text variant="secondary" mr="15px">
                             Position Size
                         </Text>
                         <Tooltip hasArrow label="For short positions set position size to negative.">
@@ -355,12 +355,19 @@ const RiskCalculator = () => {
                             </span>
                         </Tooltip>
                     </Flex>
+
+                    <Text variant="secondary" width="100px" mr="15px">
+                        Value
+                    </Text>
                 </Flex>
                 {Object.entries(markets).map(([key, market]) => (
                     <MarketRow
                         key={market.symbol}
                         market={market}
-                        amount={marketAmounts[market.symbol as keyof Markets]}
+                        value={(
+                            marketAmounts[market.symbol as keyof Markets] *
+                            (futurePrices[market.symbol as keyof Markets] - prices[market.symbol as keyof Markets])
+                        ).toFixed(2)}
                         price={prices[market.symbol as keyof Prices]}
                         futurePrice={futurePrices[market.symbol as keyof Prices]}
                         onPriceChange={updatePriceAmount}

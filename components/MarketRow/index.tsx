@@ -7,7 +7,7 @@ interface Props {
     market: Market;
     price: number;
     futurePrice: number;
-    amount: number;
+    value: string;
     onPriceChange: (key: string, newValue: number) => void;
     onFuturePriceChange: (key: string, newValue: number) => void;
     onAmountChange: (key: string, newValue: number) => void;
@@ -17,13 +17,16 @@ const MarketRow = ({
     market,
     price,
     futurePrice,
-    amount,
+    value,
     onPriceChange,
     onFuturePriceChange,
     onAmountChange,
 }: Props) => {
     const [amountStr, setAmountStr] = useState("");
     const { textColors } = useTheme();
+
+    const isNegative = Number(value) < 0;
+    const transformedValue = isNegative ? -Number(value) : value;
 
     return (
         <Flex alignItems="center" my="10px">
@@ -70,6 +73,18 @@ const MarketRow = ({
                     onAmountChange(market.symbol, floatValue ?? 0);
                     setAmountStr(formattedValue);
                 }}
+            />
+
+            <NumberFormat
+                customInput={Input}
+                disabled
+                prefix={isNegative ? "-$ " : "$ "}
+                color={textColors.secondary}
+                mr="15px"
+                width="150px"
+                value={transformedValue}
+                placeholder="0.0"
+                thousandSeparator
             />
         </Flex>
     );
