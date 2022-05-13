@@ -307,15 +307,23 @@ const RiskCalculator = () => {
                     <Text variant="secondary" width="150px" mr="15px">
                         Deposited
                     </Text>
-                    <Text variant="secondary" width="150px">
+                    <Text variant="secondary" width="150px" mr="15px">
                         Borrowed
+                    </Text>
+                    <Text variant="secondary" width="150px">
+                        Value
                     </Text>
                 </Flex>
                 {Object.entries(collaterals).map(([key, collateral]) => (
                     <CollateralRow
                         key={collateral.symbol}
                         collateral={collateral}
-                        amount={collateralAmounts[collateral.symbol as keyof CollateralAmounts]}
+                        value={
+                            collateralAmounts[collateral.symbol as keyof CollateralAmounts] *
+                                futurePrices[collateral.symbol as keyof CollateralAmounts] -
+                            borrowAmounts[collateral.symbol as keyof CollateralAmounts] *
+                                futurePrices[collateral.symbol as keyof CollateralAmounts]
+                        }
                         price={prices[collateral.symbol as keyof Prices]}
                         futurePrice={futurePrices[collateral.symbol as keyof Prices]}
                         onChangeCollateral={updateCollateralAmount}

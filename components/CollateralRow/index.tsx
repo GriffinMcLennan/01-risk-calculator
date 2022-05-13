@@ -6,7 +6,7 @@ import { useTheme } from "@chakra-ui/react";
 
 interface Props {
     collateral: Collateral;
-    amount: number;
+    value: number;
     price: number;
     futurePrice: number;
     onChangeCollateral: (key: string, newValue: number) => void;
@@ -17,6 +17,7 @@ interface Props {
 
 const CollateralRow = ({
     collateral,
+    value,
     price,
     futurePrice,
     onChangeCollateral,
@@ -43,6 +44,7 @@ const CollateralRow = ({
                 value={price}
                 placeholder="0.0"
                 disabled={disabled}
+                allowNegative={false}
                 onValueChange={(values) => {
                     const { floatValue } = values;
                     onPriceChange(collateral.symbol, floatValue ?? 0);
@@ -57,6 +59,7 @@ const CollateralRow = ({
                 placeholder="0.0"
                 color={disabled ? textColors.secondary : futurePrice >= price ? "green.400" : "red.600"}
                 disabled={collateral.symbol === "USDC" || collateral.symbol === "USDT" || collateral.symbol === "UST"}
+                allowNegative={false}
                 onValueChange={(values) => {
                     const { floatValue } = values;
                     onFuturePriceChange(collateral.symbol, floatValue ?? 0);
@@ -71,6 +74,7 @@ const CollateralRow = ({
                 value={collateralVal}
                 placeholder="0.0"
                 thousandSeparator
+                allowNegative={false}
                 onValueChange={(values) => {
                     const { floatValue, formattedValue } = values;
                     onChangeCollateral(collateral.symbol, floatValue ?? 0);
@@ -81,15 +85,28 @@ const CollateralRow = ({
             <NumberFormat
                 customInput={Input}
                 width="150px"
+                mr="15px"
                 color={textColors.secondary}
                 value={borrowVal}
                 placeholder="0.0"
                 thousandSeparator
+                allowNegative={false}
                 onValueChange={(values) => {
                     const { floatValue, formattedValue } = values;
                     onChangeBorrow(collateral.symbol, floatValue ?? 0);
                     setBorrowVal(formattedValue);
                 }}
+            />
+
+            <NumberFormat
+                prefix="$ "
+                customInput={Input}
+                width="150px"
+                color={textColors.secondary}
+                disabled
+                value={value}
+                placeholder="0.0"
+                thousandSeparator
             />
         </Flex>
     );
