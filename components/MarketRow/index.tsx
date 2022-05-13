@@ -1,4 +1,4 @@
-import { Flex, Input, Text, useTheme } from "@chakra-ui/react";
+import { ColorModeScript, Flex, Input, Text, useTheme } from "@chakra-ui/react";
 import { useState } from "react";
 import NumberFormat from "react-number-format";
 import { Market } from "../../data/markets";
@@ -7,6 +7,7 @@ interface Props {
     market: Market;
     price: number;
     futurePrice: number;
+    liqPrice: number;
     value: string;
     onPriceChange: (key: string, newValue: number) => void;
     onFuturePriceChange: (key: string, newValue: number) => void;
@@ -17,6 +18,7 @@ const MarketRow = ({
     market,
     price,
     futurePrice,
+    liqPrice,
     value,
     onPriceChange,
     onFuturePriceChange,
@@ -58,6 +60,16 @@ const MarketRow = ({
                     const { floatValue } = values;
                     onFuturePriceChange(market.symbol, floatValue ?? 0);
                 }}
+            />
+
+            <NumberFormat
+                customInput={Input}
+                color={textColors.primary}
+                disabled
+                mr="15px"
+                width="100px"
+                value={liqPrice === -1 ? "" : liqPrice.toFixed(2)}
+                placeholder="-"
             />
 
             <NumberFormat

@@ -127,6 +127,7 @@ const RiskCalculator = () => {
     const calculateLiquidation = (key: string) => {
         let totalDirectional =
             (key in marketAmounts && marketAmounts[key]) - (key in borrowAmounts && borrowAmounts[key]);
+
         // changes in this token don't have any delta => impossible to liquidate
         if (totalDirectional === 0 || accountRisk >= 100) return -1;
 
@@ -196,14 +197,14 @@ const RiskCalculator = () => {
         return low;
     };
 
-    console.log("SOL Liquidation:", calculateLiquidation("SOL"));
-    console.log("BTC Liquidation:", calculateLiquidation("BTC"));
-    console.log("ETH Liquidation:", calculateLiquidation("ETH"));
-    console.log("mSOL Liquidation:", calculateLiquidation("mSOL"));
-    console.log("LUNA Liquidation:", calculateLiquidation("LUNA"));
-    console.log("AVAX Liquidation:", calculateLiquidation("AVAX"));
-    console.log("APE Liquidation:", calculateLiquidation("APE"));
-    console.log("NEAR Liquidation:", calculateLiquidation("NEAR"));
+    // console.log("SOL Liquidation:", calculateLiquidation("SOL"));
+    // console.log("BTC Liquidation:", calculateLiquidation("BTC"));
+    // console.log("ETH Liquidation:", calculateLiquidation("ETH"));
+    // console.log("mSOL Liquidation:", calculateLiquidation("mSOL"));
+    // console.log("LUNA Liquidation:", calculateLiquidation("LUNA"));
+    // console.log("AVAX Liquidation:", calculateLiquidation("AVAX"));
+    // console.log("APE Liquidation:", calculateLiquidation("APE"));
+    // console.log("NEAR Liquidation:", calculateLiquidation("NEAR"));
 
     const updateCollateralAmount = (key: string, newValue: number) => {
         const oldAmounts = { ...collateralAmounts };
@@ -349,6 +350,10 @@ const RiskCalculator = () => {
                     <Text variant="secondary" width="100px" mr="15px">
                         Future Price
                     </Text>
+                    <Text variant="secondary" width="100px" mr="15px">
+                        Liq. Price
+                    </Text>
+
                     <Flex alignItems="center" width="150px" mr="15px">
                         <Text variant="secondary" mr="15px">
                             Position Size
@@ -374,6 +379,7 @@ const RiskCalculator = () => {
                         ).toFixed(2)}
                         price={prices[market.symbol as keyof Prices]}
                         futurePrice={futurePrices[market.symbol as keyof Prices]}
+                        liqPrice={calculateLiquidation(market.symbol)}
                         onPriceChange={updatePriceAmount}
                         onFuturePriceChange={updateFuturePriceAmount}
                         onAmountChange={updateMarketAmount}
