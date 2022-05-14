@@ -7,7 +7,7 @@ export const TextStyles = {
     // styles for different visual variants ("outline", "solid")
     variants: {
         primary: {
-            color: "#fff",
+            color: "rgba(255, 255, 255, 0.9)",
         },
         secondary: {
             color: "rgba(255, 255, 255, 0.7)",

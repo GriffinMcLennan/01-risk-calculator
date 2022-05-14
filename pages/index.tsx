@@ -5,7 +5,14 @@ import RiskCalculator from "../components/RiskCalculator";
 
 const Home: NextPage = () => {
     return (
-        <Flex backgroundColor="primary" height="100vh" width="100vw" flexDirection="column" alignItems="center">
+        <Flex
+            backgroundColor="primary"
+            height="100vh"
+            width="100vw"
+            flexDirection="column"
+            alignItems="center"
+            overflowX="hidden"
+        >
             <Head>
                 <title>01 Risk Calculator</title>
                 <meta name="description" content="Calculate the theoretical risk of your account" /> {/* TODO */}

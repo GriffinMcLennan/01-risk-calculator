@@ -1,4 +1,4 @@
-import { Flex, Tooltip, Text, ColorModeScript, useTheme } from "@chakra-ui/react";
+import { Flex, Tooltip, Text, ColorModeScript, useTheme, Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Accordion from "../Accordion";
 import { Collateral, collaterals } from "../../data/collaterals";
@@ -116,7 +116,7 @@ const RiskCalculator = () => {
 
     const TAV = totalAccountValue(collateralAmounts, borrowAmounts, marketAmounts, prices, futurePrices);
     const TNV = totalNotionalValue(borrowAmounts, marketAmounts, futurePrices);
-    const MF = TAV / TNV;
+    const MF = TNV === 0 ? NaN : TAV / TNV;
 
     // console.log(TAV, TNV, MF);
 
@@ -290,12 +290,44 @@ const RiskCalculator = () => {
         initializePrices();
     }, []);
 
+    console.log(accountRisk, accountRisk === NaN);
+
     return (
         <Flex flexDirection="column" alignItems="center">
             <Text variant="primary" fontSize="32px" mt="20px" fontWeight="600">
                 01 Exchange Risk Calculator
             </Text>
 
+            <Box
+                display="grid"
+                placeItems="center"
+                backgroundColor="secondary"
+                borderRadius="50%"
+                width="250px"
+                height="250px"
+                marginTop="50px"
+                border="5px solid"
+                borderColor="red.500"
+            >
+                <Flex flexDirection="column">
+                    <Flex>
+                        <Text fontWeight="600" variant="primary" width="150px">
+                            Account Risk:{" "}
+                        </Text>
+                        <Text fontWeight="600" variant="primary">
+                            {Number.isNaN(accountRisk) ? "0" : accountRisk.toFixed(2)}
+                        </Text>
+                    </Flex>
+                    <Flex>
+                        <Text fontWeight="600" variant="primary" width="150px">
+                            Margin Fraction:{" "}
+                        </Text>
+                        <Text fontWeight="600" variant="primary">
+                            {Number.isNaN(MF) ? "N/A" : MF.toFixed(2)}
+                        </Text>
+                    </Flex>
+                </Flex>
+            </Box>
             <Accordion title="Collateral and Borrows">
                 <Flex>
                     <Text variant="secondary" width="120px" mr="15px">
