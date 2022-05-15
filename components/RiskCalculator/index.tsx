@@ -1,7 +1,7 @@
-import { Flex, Tooltip, Text, ColorModeScript, useTheme, Box } from "@chakra-ui/react";
+import { Flex, Tooltip, Text, useTheme, Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Accordion from "../Accordion";
-import { Collateral, collaterals } from "../../data/collaterals";
+import { collaterals } from "../../data/collaterals";
 import { markets } from "../../data/markets";
 import fetchPrices from "../../utils/api/fetchPrices";
 import CollateralRow from "../CollateralRow";
@@ -13,7 +13,7 @@ import theoreticalTotalAccountValue from "../../math/theoreticalTotalAccountValu
 import theoreticalTotalNotionalValue from "../../math/theoreticalTotalNotionalValue";
 import theoreticalMaintenanceMarginFactor from "../../math/theoreticalMaintenanceMarginFactor";
 import { AiOutlineInfoCircle } from "react-icons/ai";
-import Image from "next/image";
+import chroma from "chroma-js";
 
 interface CollateralAmounts {
     USDC: number;
@@ -50,8 +50,8 @@ interface Markets {
 }
 
 const RiskCalculator = () => {
-    const { textColors } = useTheme();
-
+    const { textColors, colors } = useTheme();
+    // console.log("Here:", colors["red"]["50"]);
     const [prices, setPrices] = useState<Prices>({
         SOL: 0,
         BTC: 0,
@@ -290,11 +290,12 @@ const RiskCalculator = () => {
         initializePrices();
     }, []);
 
-    console.log(accountRisk, accountRisk === NaN);
+    const colorScale = chroma.scale([colors["green"]["600"], colors["yellow"]["500"], colors["red"]["500"]]);
+    const colorVal = Number.isNaN(accountRisk) ? 0 : accountRisk / 100;
 
     return (
         <Flex flexDirection="column" alignItems="center">
-            <Text variant="primary" fontSize="32px" mt="20px" fontWeight="600">
+            <Text variant="primary" fontSize="38px" mt="30px" fontWeight="600">
                 01 Exchange Risk Calculator
             </Text>
 
@@ -302,19 +303,22 @@ const RiskCalculator = () => {
                 display="grid"
                 placeItems="center"
                 backgroundColor="secondary"
-                borderRadius="50%"
-                width="250px"
-                height="250px"
-                marginTop="50px"
+                borderRadius="20px"
+                width="400px"
+                height="125px"
+                marginTop="30px"
+                marginBottom="20px"
                 border="5px solid"
-                borderColor="red.500"
+                borderColor={colorScale(colorVal).hex()}
+                overflowX="auto"
+                padding="10px"
             >
                 <Flex flexDirection="column">
                     <Flex>
                         <Text fontWeight="600" variant="primary" width="150px">
                             Account Risk:{" "}
                         </Text>
-                        <Text fontWeight="600" variant="primary">
+                        <Text fontWeight="600" variant="primary" color={colorScale(colorVal).hex()}>
                             {Number.isNaN(accountRisk) ? "0" : accountRisk.toFixed(2)}
                         </Text>
                     </Flex>
@@ -324,6 +328,15 @@ const RiskCalculator = () => {
                         </Text>
                         <Text fontWeight="600" variant="primary">
                             {Number.isNaN(MF) ? "N/A" : MF.toFixed(2)}
+                        </Text>
+                    </Flex>
+
+                    <Flex>
+                        <Text fontWeight="600" variant="primary" width="150px">
+                            Account Value:
+                        </Text>
+                        <Text fontWeight="600" variant="primary">
+                            ${TAV.toFixed(2)}
                         </Text>
                     </Flex>
                 </Flex>

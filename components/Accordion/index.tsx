@@ -6,9 +6,18 @@ const Accordion = ({ title, children }: any) => {
 
     return (
         <Flex flexDirection="column" bg="secondary" borderRadius="10px" margin="20px" minHeight="40px" width="995px">
-            <Flex width="40vw" padding="20px" cursor="pointer" alignItems="center" onClick={onToggle}>
+            <Flex
+                width="40vw"
+                mt="20px"
+                mb={isOpen ? "20px" : "0px"}
+                // padding="20px"
+                ml="20px"
+                cursor="pointer"
+                alignItems="center"
+                onClick={onToggle}
+            >
                 {isOpen ? <FaChevronUp color="#fff" /> : <FaChevronDown color="#fff" />}
-                <Text variant="primary" ml="5px">
+                <Text variant="primary" ml="15px" fontSize="20px">
                     {title}
                 </Text>
             </Flex>
