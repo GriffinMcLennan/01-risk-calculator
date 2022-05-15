@@ -1,7 +1,7 @@
 import { Flex, Tooltip, Text, useTheme, Box, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Accordion from "../Accordion";
-import { collaterals } from "../../data/collaterals";
+import { Collaterals, collaterals } from "../../data/collaterals";
 import { markets } from "../../data/markets";
 import fetchPrices from "../../utils/api/fetchPrices";
 import CollateralRow from "../CollateralRow";
@@ -127,8 +127,15 @@ const RiskCalculator = () => {
     // console.log("MF, MMF, Account Risk:", MF, MMF, accountRisk);
 
     const calculateLiquidation = (key: string) => {
-        let totalDirectional =
-            (key in marketAmounts && marketAmounts[key]) - (key in borrowAmounts && borrowAmounts[key]);
+        let totalDirectional = 0;
+
+        if (key in marketAmounts) {
+            totalDirectional += marketAmounts[key as keyof Markets];
+        }
+
+        if (key in borrowAmounts) {
+            totalDirectional -= borrowAmounts[key as keyof Collaterals];
+        }
 
         // changes in this token don't have any delta => impossible to liquidate
         if (totalDirectional === 0 || accountRisk >= 100) return -1;

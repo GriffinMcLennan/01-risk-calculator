@@ -61,6 +61,15 @@ const msolCollateral: Collateral = {
     imgURL: "/msol.svg",
 };
 
+interface Collaterals {
+    USDC: Collateral;
+    USDT: Collateral;
+    SOL: Collateral;
+    BTC: Collateral;
+    ETH: Collateral;
+    mSOL: Collateral;
+}
+
 const collaterals = {
     USDC: usdcCollateral,
     USDT: usdtCollateral,
@@ -71,5 +80,5 @@ const collaterals = {
     mSOL: msolCollateral,
 };
 
-export type { Collateral };
+export type { Collateral, Collaterals };
 export { collaterals };

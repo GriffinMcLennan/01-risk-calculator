@@ -83,6 +83,15 @@ const solSquaredMarket: Market = {
     imgURL: "/solana.svg",
 };
 
+interface Markets {
+    SOL: Market;
+    BTC: Market;
+    ETH: Market;
+    AVAX: Market;
+    APE: Market;
+    NEAR: Market;
+}
+
 const markets = {
     SOL: solMarket,
     BTC: btcMarket,
@@ -94,5 +103,5 @@ const markets = {
     // solSquaredMarket, TODO: FIX
 };
 
-export type { Market };
+export type { Market, Markets };
 export { markets };
