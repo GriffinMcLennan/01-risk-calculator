@@ -14,7 +14,6 @@ import theoreticalTotalNotionalValue from "../../math/theoreticalTotalNotionalVa
 import theoreticalMaintenanceMarginFactor from "../../math/theoreticalMaintenanceMarginFactor";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import chroma from "chroma-js";
-import NumberFormat from "react-number-format";
 
 interface CollateralAmounts {
     USDC: number;
@@ -45,6 +44,24 @@ interface Markets {
     BTC: number;
     ETH: number;
     // LUNA: number;
+    AVAX: number;
+    APE: number;
+    NEAR: number;
+}
+
+interface BorrowAmounts {
+    USDC: number;
+    USDT: number;
+    SOL: number;
+    BTC: number;
+    ETH: number;
+    mSOL: number;
+}
+
+interface MarketAmounts {
+    SOL: number;
+    BTC: number;
+    ETH: number;
     AVAX: number;
     APE: number;
     NEAR: number;
@@ -91,7 +108,7 @@ const RiskCalculator = () => {
         mSOL: 0,
     });
 
-    const [borrowAmounts, setBorrowAmounts] = useState({
+    const [borrowAmounts, setBorrowAmounts] = useState<BorrowAmounts>({
         USDC: 0,
         USDT: 0,
         // UST: 0,
@@ -101,7 +118,7 @@ const RiskCalculator = () => {
         mSOL: 0,
     });
 
-    const [marketAmounts, setMarketAmounts] = useState({
+    const [marketAmounts, setMarketAmounts] = useState<MarketAmounts>({
         SOL: 0,
         BTC: 0,
         ETH: 0,
@@ -488,4 +505,5 @@ const RiskCalculator = () => {
     );
 };
 
+export type { CollateralAmounts, Prices, Markets, BorrowAmounts, MarketAmounts };
 export default RiskCalculator;

@@ -1,9 +1,11 @@
+import { BorrowAmounts, CollateralAmounts, MarketAmounts, Prices } from "../components/RiskCalculator";
+
 function theoreticalTotalAccountValue(
-    collateralAmounts: any,
-    borrowAmounts: any,
-    marketAmounts: any,
-    prices: any,
-    futurePrices: any,
+    collateralAmounts: CollateralAmounts,
+    borrowAmounts: BorrowAmounts,
+    marketAmounts: MarketAmounts,
+    prices: Prices,
+    futurePrices: Prices,
     overrideKey: string,
     overridePrice: number
 ): number {
@@ -14,7 +16,7 @@ function theoreticalTotalAccountValue(
         if (key === overrideKey) {
             value += overridePrice * amount;
         } else {
-            value += futurePrices[key] * amount;
+            value += futurePrices[key as keyof Prices] * amount;
         }
         // console.log(key, prices[key], amount, prices[key] * amount);
     }
@@ -24,16 +26,16 @@ function theoreticalTotalAccountValue(
         if (key === overrideKey) {
             value -= overridePrice * amount;
         } else {
-            value -= futurePrices[key] * amount;
+            value -= futurePrices[key as keyof Prices] * amount;
         }
     }
 
     // calculate position PNL
     for (const [key, amount] of Object.entries(marketAmounts)) {
         if (key === overrideKey) {
-            value += (overridePrice - prices[key]) * amount;
+            value += (overridePrice - prices[key as keyof Prices]) * amount;
         } else {
-            value += (futurePrices[key] - prices[key]) * amount;
+            value += (futurePrices[key as keyof Prices] - prices[key as keyof Prices]) * amount;
         }
     }
 

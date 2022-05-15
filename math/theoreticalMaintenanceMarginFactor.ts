@@ -1,11 +1,12 @@
-import { collaterals } from "../data/collaterals";
+import { BorrowAmounts, MarketAmounts, Prices } from "../components/RiskCalculator";
+import { Collaterals, collaterals } from "../data/collaterals";
 import { markets } from "../data/markets";
 
 function theoreticalMaintenanceMarginFactor(
-    borrowAmounts: any,
-    marketAmounts: any,
-    prices: any,
-    totalNotionalValue: any,
+    borrowAmounts: BorrowAmounts,
+    marketAmounts: MarketAmounts,
+    prices: Prices,
+    totalNotionalValue: number,
     overrideKey: string,
     overridePrice: number
 ): number {
@@ -14,25 +15,25 @@ function theoreticalMaintenanceMarginFactor(
     // calculate borrows
 
     for (const [key, amount] of Object.entries(borrowAmounts)) {
-        const weight = collaterals[key].weight;
+        const weight = collaterals[key as keyof Collaterals].weight;
         const MMF_base = 1.03 / weight - 1;
 
         if (key === overrideKey) {
             numerator += overridePrice * amount * MMF_base;
         } else {
-            numerator += prices[key] * amount * MMF_base;
+            numerator += prices[key as keyof Prices] * amount * MMF_base;
         }
     }
 
     // calculate positions
 
     for (const [key, amount] of Object.entries(marketAmounts)) {
-        const MMF_base = markets[key].baseMMF;
+        const MMF_base = markets[key as keyof MarketAmounts].baseMMF;
 
         if (key === overrideKey) {
             numerator += overridePrice * Math.abs(amount) * MMF_base;
         } else {
-            numerator += prices[key] * Math.abs(amount) * MMF_base;
+            numerator += prices[key as keyof Prices] * Math.abs(amount) * MMF_base;
         }
     }
 

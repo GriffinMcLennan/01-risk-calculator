@@ -1,7 +1,9 @@
+import { BorrowAmounts, MarketAmounts, Prices } from "../components/RiskCalculator";
+
 function theoreticalTotalNotionalValue(
-    borrowAmounts: any,
-    marketAmounts: any,
-    futurePrices: any,
+    borrowAmounts: BorrowAmounts,
+    marketAmounts: MarketAmounts,
+    futurePrices: Prices,
     overrideKey: string,
     overridePrice: number
 ): number {
@@ -12,7 +14,7 @@ function theoreticalTotalNotionalValue(
         if (key === overrideKey) {
             value += overridePrice * amount;
         } else {
-            value += futurePrices[key] * amount;
+            value += futurePrices[key as keyof Prices] * amount;
         }
     }
 
@@ -20,7 +22,7 @@ function theoreticalTotalNotionalValue(
         if (key === overrideKey) {
             value += overridePrice * Math.abs(amount);
         } else {
-            value += futurePrices[key] * Math.abs(amount);
+            value += futurePrices[key as keyof Prices] * Math.abs(amount);
         }
     }
 
