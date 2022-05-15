@@ -1,4 +1,4 @@
-import { Flex, Tooltip, Text, useTheme, Box } from "@chakra-ui/react";
+import { Flex, Tooltip, Text, useTheme, Box, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Accordion from "../Accordion";
 import { collaterals } from "../../data/collaterals";
@@ -14,6 +14,7 @@ import theoreticalTotalNotionalValue from "../../math/theoreticalTotalNotionalVa
 import theoreticalMaintenanceMarginFactor from "../../math/theoreticalMaintenanceMarginFactor";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import chroma from "chroma-js";
+import NumberFormat from "react-number-format";
 
 interface CollateralAmounts {
     USDC: number;
@@ -135,7 +136,7 @@ const RiskCalculator = () => {
         // console.log("totalDirectional:", totalDirectional);
 
         let low = 0.0;
-        let high = 200_000.0;
+        let high = 1_000_000.0;
 
         while (Math.abs(high - low) > 0.001) {
             let theoreticalPrice = (low + high) / 2;
@@ -193,6 +194,40 @@ const RiskCalculator = () => {
                     low = theoreticalPrice;
                 }
             }
+        }
+
+        const delta = totalDirectional > 0 ? -0.01 : 0.01;
+
+        const theoreticalTAV = theoreticalTotalAccountValue(
+            collateralAmounts,
+            borrowAmounts,
+            marketAmounts,
+            prices,
+            futurePrices,
+            key,
+            low + delta
+        );
+
+        const theoreticalTNV = theoreticalTotalNotionalValue(
+            borrowAmounts,
+            marketAmounts,
+            futurePrices,
+            key,
+            low + delta
+        );
+
+        const theoreticalMF = Math.min(1, Math.abs(theoreticalTAV / theoreticalTNV));
+        const theoreticalMMF = theoreticalMaintenanceMarginFactor(
+            borrowAmounts,
+            marketAmounts,
+            futurePrices,
+            theoreticalTNV,
+            key,
+            low + delta
+        );
+
+        if (theoreticalMF > theoreticalMMF) {
+            return totalDirectional > 0 ? 0 : -2;
         }
 
         return low;
@@ -299,13 +334,14 @@ const RiskCalculator = () => {
                 01 Exchange Risk Calculator
             </Text>
 
-            <Box
+            <Flex
                 display="grid"
-                placeItems="center"
+                // placeItems="center"
+                alignItems="center"
                 backgroundColor="secondary"
                 borderRadius="20px"
                 width="400px"
-                height="125px"
+                height="130px"
                 marginTop="30px"
                 marginBottom="20px"
                 border="5px solid"
@@ -314,12 +350,16 @@ const RiskCalculator = () => {
                 padding="10px"
             >
                 <Flex flexDirection="column">
-                    <Flex>
+                    <Flex justifyContent="flex-start">
                         <Text fontWeight="600" variant="primary" width="150px">
                             Account Risk:{" "}
                         </Text>
                         <Text fontWeight="600" variant="primary" color={colorScale(colorVal).hex()}>
-                            {Number.isNaN(accountRisk) ? "0" : accountRisk.toFixed(2)}
+                            {Number.isNaN(accountRisk)
+                                ? "0"
+                                : accountRisk >= 100
+                                ? "Liquidated"
+                                : accountRisk.toFixed(2)}
                         </Text>
                     </Flex>
                     <Flex>
@@ -336,11 +376,14 @@ const RiskCalculator = () => {
                             Account Value:
                         </Text>
                         <Text fontWeight="600" variant="primary">
-                            ${TAV.toFixed(2)}
+                            {TAV.toLocaleString("en-US", {
+                                style: "currency",
+                                currency: "USD",
+                            })}
                         </Text>
                     </Flex>
                 </Flex>
-            </Box>
+            </Flex>
             <Accordion title="Collateral and Borrows">
                 <Flex>
                     <Text variant="secondary" width="120px" mr="15px">

@@ -78,7 +78,9 @@ const CollateralRow = ({
                 mr="15px"
                 color={textColors.secondary}
                 disabled
-                value={liqPrice === -1 ? "" : liqPrice.toFixed(2)}
+                prefix={liqPrice === -2 ? "> " : ""}
+                suffix={liqPrice === -2 ? " Mill" : ""}
+                value={liqPrice === -1 ? "" : liqPrice === -2 ? "1" : liqPrice.toFixed(2)}
                 placeholder="-"
                 thousandSeparator
             />
