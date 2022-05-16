@@ -269,7 +269,7 @@ const RiskCalculator = () => {
         );
 
         if (theoreticalMF > theoreticalMMF) {
-            return totalDirectional > 0 ? 0 : -2;
+            return totalDirectional > 0 ? -1 : -2;
         }
 
         return low;
