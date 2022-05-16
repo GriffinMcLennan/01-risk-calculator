@@ -12,10 +12,9 @@ const Accordion = ({ title, children }: any) => {
             margin="20px"
             minHeight="40px"
             width="min(90vw, 995px)"
-            overflow="auto"
         >
             <Flex
-                width="40vw"
+                width="100%"
                 mt="20px"
                 mb={isOpen ? "20px" : "0px"}
                 // padding="20px"
@@ -23,6 +22,7 @@ const Accordion = ({ title, children }: any) => {
                 cursor="pointer"
                 alignItems="center"
                 onClick={onToggle}
+                overflow="hidden"
             >
                 {isOpen ? <FaChevronUp color="#fff" /> : <FaChevronDown color="#fff" />}
                 <Text variant="primary" ml="15px" fontSize="20px">

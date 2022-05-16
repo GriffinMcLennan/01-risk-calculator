@@ -408,7 +408,7 @@ const RiskCalculator = () => {
                 </Flex>
             </Flex>
             <Accordion title="Collateral and Borrows">
-                <Flex display="flex" flexDirection="column" overflowX="scroll" pb="10px">
+                <Flex display="flex" flexDirection="column" overflowX="auto" pb="10px">
                     <Flex>
                         <Text variant="secondary" minWidth="120px" width="120px" mr="15px">
                             Asset
@@ -423,10 +423,10 @@ const RiskCalculator = () => {
                             Liq. Price
                         </Text>
 
-                        <Text variant="secondary" minWidth="150px" width="150px" mr="15px">
+                        <Text variant="secondary" minWidth="140px" width="140px" mr="15px">
                             Deposited
                         </Text>
-                        <Text variant="secondary" minWidth="150px" width="150px" mr="15px">
+                        <Text variant="secondary" minWidth="140px" width="140px" mr="15px">
                             Borrowed
                         </Text>
                         <Text variant="secondary" minWidth="140px" width="150px">
@@ -456,51 +456,53 @@ const RiskCalculator = () => {
             </Accordion>
 
             <Accordion title="Perpetuals">
-                <Flex>
-                    <Text variant="secondary" width="135px" mr="15px">
-                        Market
-                    </Text>
-                    <Text variant="secondary" width="150px" mr="11px">
-                        Entry Price
-                    </Text>
-                    <Text variant="secondary" width="150px" mr="11px">
-                        Future Price
-                    </Text>
-                    <Text variant="secondary" width="150px" mr="11px">
-                        Liq. Price
-                    </Text>
-
-                    <Flex alignItems="center" width="150px" mr="11px">
-                        <Text variant="secondary" mr="15px">
-                            Position Size
+                <Flex display="flex" flexDirection="column" overflowX="auto" pb="10px">
+                    <Flex>
+                        <Text variant="secondary" minWidth="135px" width="135px" mr="5px">
+                            Market
                         </Text>
-                        <Tooltip hasArrow label="For short positions set position size to negative.">
-                            <span>
-                                <AiOutlineInfoCircle color={textColors.secondary} />
-                            </span>
-                        </Tooltip>
-                    </Flex>
+                        <Text variant="secondary" minWidth="150px" width="150px" mr="11px">
+                            Entry Price
+                        </Text>
+                        <Text variant="secondary" minWidth="150px" width="150px" mr="11px">
+                            Future Price
+                        </Text>
+                        <Text variant="secondary" minWidth="150px" width="150px" mr="11px">
+                            Liq. Price
+                        </Text>
 
-                    <Text variant="secondary" width="100px" mr="15px">
-                        Value
-                    </Text>
+                        <Flex alignItems="center" minWidth="150px" width="150px" mr="11px">
+                            <Text variant="secondary" mr="15px">
+                                Position Size
+                            </Text>
+                            <Tooltip hasArrow label="For short positions set position size to negative.">
+                                <span>
+                                    <AiOutlineInfoCircle color={textColors.secondary} />
+                                </span>
+                            </Tooltip>
+                        </Flex>
+
+                        <Text variant="secondary" minWidth="100px" width="100px" mr="15px">
+                            Value
+                        </Text>
+                    </Flex>
+                    {Object.entries(markets).map(([key, market]) => (
+                        <MarketRow
+                            key={market.symbol}
+                            market={market}
+                            value={(
+                                marketAmounts[market.symbol as keyof Markets] *
+                                (futurePrices[market.symbol as keyof Markets] - prices[market.symbol as keyof Markets])
+                            ).toFixed(2)}
+                            price={prices[market.symbol as keyof Prices]}
+                            futurePrice={futurePrices[market.symbol as keyof Prices]}
+                            liqPrice={calculateLiquidation(market.symbol)}
+                            onPriceChange={updatePriceAmount}
+                            onFuturePriceChange={updateFuturePriceAmount}
+                            onAmountChange={updateMarketAmount}
+                        />
+                    ))}
                 </Flex>
-                {Object.entries(markets).map(([key, market]) => (
-                    <MarketRow
-                        key={market.symbol}
-                        market={market}
-                        value={(
-                            marketAmounts[market.symbol as keyof Markets] *
-                            (futurePrices[market.symbol as keyof Markets] - prices[market.symbol as keyof Markets])
-                        ).toFixed(2)}
-                        price={prices[market.symbol as keyof Prices]}
-                        futurePrice={futurePrices[market.symbol as keyof Prices]}
-                        liqPrice={calculateLiquidation(market.symbol)}
-                        onPriceChange={updatePriceAmount}
-                        onFuturePriceChange={updateFuturePriceAmount}
-                        onAmountChange={updateMarketAmount}
-                    />
-                ))}
             </Accordion>
         </Flex>
     );

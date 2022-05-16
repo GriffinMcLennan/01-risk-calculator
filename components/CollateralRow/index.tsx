@@ -1,9 +1,8 @@
-import { Text, Flex, Input } from "@chakra-ui/react";
+import { Text, Flex, Input, Image } from "@chakra-ui/react";
 import { Collateral } from "../../data/collaterals";
 import NumberFormat from "react-number-format";
 import { useState } from "react";
 import { useTheme } from "@chakra-ui/react";
-import Image from "next/image";
 
 interface Props {
     collateral: Collateral;
@@ -93,8 +92,8 @@ const CollateralRow = ({
             <NumberFormat
                 customInput={Input}
                 mr="15px"
-                width="150px"
-                minWidth="150px"
+                width="140px"
+                minWidth="140px"
                 color={textColors.secondary}
                 value={collateralVal}
                 placeholder="0.0"
@@ -109,8 +108,8 @@ const CollateralRow = ({
 
             <NumberFormat
                 customInput={Input}
-                width="150px"
-                minWidth="150px"
+                width="140px"
+                minWidth="140px"
                 mr="15px"
                 color={textColors.secondary}
                 value={borrowVal}
@@ -127,8 +126,8 @@ const CollateralRow = ({
             <NumberFormat
                 prefix={isNegative ? "-$" : "$"}
                 customInput={Input}
-                width="150px"
-                minWidth="150px"
+                width="140px"
+                minWidth="140px"
                 color={textColors.secondary}
                 disabled
                 value={transformedValue}

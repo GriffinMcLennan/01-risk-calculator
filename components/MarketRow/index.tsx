@@ -32,22 +32,25 @@ const MarketRow = ({
 
     return (
         <Flex alignItems="center" my="10px">
-            <Image
-                src={market.imgURL}
-                height="25px"
-                width="25px"
-                borderRadius={market.symbol === "NEAR" ? "50%" : "0px"}
-                alt={market.symbol}
-            />
-            <Text variant="secondary" width="100px" ml="10px" mr="15px">
-                {market.symbol}
-            </Text>
+            <Flex minWidth="135px" width="135px" minHeight="25px">
+                <Image
+                    src={market.imgURL}
+                    height="25px"
+                    width="25px"
+                    borderRadius={market.symbol === "NEAR" ? "50%" : "0px"}
+                    alt={market.symbol}
+                />
+                <Text variant="secondary" width="100px" ml="10px" mr="15px">
+                    {market.symbol}
+                </Text>
+            </Flex>
 
             <NumberFormat
                 customInput={Input}
                 color={textColors.secondary}
                 mr="15px"
                 width="145px"
+                minWidth="145px"
                 value={price}
                 placeholder="0.0"
                 onValueChange={(values) => {
@@ -60,6 +63,7 @@ const MarketRow = ({
                 customInput={Input}
                 mr="15px"
                 width="145px"
+                minWidth="145px"
                 color={futurePrice >= price ? "green.400" : "red.600"}
                 value={futurePrice}
                 placeholder="0.0"
@@ -75,6 +79,7 @@ const MarketRow = ({
                 disabled
                 mr="15px"
                 width="145px"
+                minWidth="145px"
                 prefix={liqPrice === -2 ? "> " : ""}
                 suffix={liqPrice === -2 ? " Mill" : ""}
                 value={liqPrice === -1 ? "" : liqPrice === -2 ? "1" : liqPrice.toFixed(2)}
@@ -86,6 +91,7 @@ const MarketRow = ({
                 color={textColors.secondary}
                 mr="15px"
                 width="150px"
+                minWidth="150px"
                 value={amountStr}
                 placeholder="0.0"
                 thousandSeparator
@@ -103,6 +109,7 @@ const MarketRow = ({
                 color={textColors.secondary}
                 mr="15px"
                 width="150px"
+                minWidth="150px"
                 value={transformedValue}
                 placeholder="0.0"
                 thousandSeparator
