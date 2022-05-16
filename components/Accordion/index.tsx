@@ -5,7 +5,15 @@ const Accordion = ({ title, children }: any) => {
     const { isOpen, onToggle } = useDisclosure();
 
     return (
-        <Flex flexDirection="column" bg="secondary" borderRadius="10px" margin="20px" minHeight="40px" width="995px">
+        <Flex
+            flexDirection="column"
+            bg="secondary"
+            borderRadius="10px"
+            margin="20px"
+            minHeight="40px"
+            width="min(90vw, 995px)"
+            overflow="auto"
+        >
             <Flex
                 width="40vw"
                 mt="20px"

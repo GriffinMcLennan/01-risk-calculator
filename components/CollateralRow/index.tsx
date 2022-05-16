@@ -37,15 +37,18 @@ const CollateralRow = ({
 
     return (
         <Flex alignItems="center" my="10px">
-            <Image src={collateral.imgURL} height="25px" width="25px" alt={collateral.symbol} />
-            <Text variant="secondary" width="100px" ml="10px">
-                {collateral.symbol}
-            </Text>
+            <Flex alignItems="center" minWidth="125px" minHeight="25px" height="25px">
+                <Image src={collateral.imgURL} height="25px" width="25px" alt={collateral.symbol} />
+                <Text variant="secondary" width="100px" minWidth="100px" ml="10px">
+                    {collateral.symbol}
+                </Text>
+            </Flex>
 
             <NumberFormat
                 customInput={Input}
                 mr="15px"
                 width="100px"
+                minWidth="100px"
                 color={textColors.secondary}
                 value={price}
                 placeholder="0.0"
@@ -61,6 +64,7 @@ const CollateralRow = ({
                 customInput={Input}
                 mr="15px"
                 width="100px"
+                minWidth="100px"
                 value={futurePrice}
                 placeholder="0.0"
                 color={disabled ? textColors.secondary : futurePrice >= price ? "green.400" : "red.600"}
@@ -75,6 +79,7 @@ const CollateralRow = ({
             <NumberFormat
                 customInput={Input}
                 width="100px"
+                minWidth="100px"
                 mr="15px"
                 color={textColors.secondary}
                 disabled
@@ -89,6 +94,7 @@ const CollateralRow = ({
                 customInput={Input}
                 mr="15px"
                 width="150px"
+                minWidth="150px"
                 color={textColors.secondary}
                 value={collateralVal}
                 placeholder="0.0"
@@ -104,6 +110,7 @@ const CollateralRow = ({
             <NumberFormat
                 customInput={Input}
                 width="150px"
+                minWidth="150px"
                 mr="15px"
                 color={textColors.secondary}
                 value={borrowVal}
@@ -121,6 +128,7 @@ const CollateralRow = ({
                 prefix={isNegative ? "-$" : "$"}
                 customInput={Input}
                 width="150px"
+                minWidth="150px"
                 color={textColors.secondary}
                 disabled
                 value={transformedValue}

@@ -354,17 +354,16 @@ const RiskCalculator = () => {
 
     return (
         <Flex flexDirection="column" alignItems="center">
-            <Text variant="primary" fontSize="38px" mt="30px" fontWeight="600">
+            <Text variant="primary" fontSize={{ base: "24px", md: "38px" }} mt="30px" fontWeight="600">
                 01 Exchange Risk Calculator
             </Text>
 
             <Flex
                 display="grid"
-                // placeItems="center"
                 alignItems="center"
                 backgroundColor="secondary"
                 borderRadius="20px"
-                width="400px"
+                width="min(90vw, 400px)"
                 height="130px"
                 marginTop="30px"
                 marginBottom="20px"
@@ -409,49 +408,51 @@ const RiskCalculator = () => {
                 </Flex>
             </Flex>
             <Accordion title="Collateral and Borrows">
-                <Flex>
-                    <Text variant="secondary" width="120px" mr="15px">
-                        Asset
-                    </Text>
-                    <Text variant="secondary" width="100px" mr="15px">
-                        Entry Price
-                    </Text>
-                    <Text variant="secondary" width="100px" mr="15px">
-                        Future Price
-                    </Text>
-                    <Text variant="secondary" width="100px" mr="15px">
-                        Liq. Price
-                    </Text>
+                <Flex display="flex" flexDirection="column" overflowX="scroll" pb="10px">
+                    <Flex>
+                        <Text variant="secondary" minWidth="120px" width="120px" mr="15px">
+                            Asset
+                        </Text>
+                        <Text variant="secondary" minWidth="100px" width="100px" mr="15px">
+                            Entry Price
+                        </Text>
+                        <Text variant="secondary" minWidth="100px" width="100px" mr="15px">
+                            Future Price
+                        </Text>
+                        <Text variant="secondary" minWidth="100px" width="100px" mr="15px">
+                            Liq. Price
+                        </Text>
 
-                    <Text variant="secondary" width="150px" mr="15px">
-                        Deposited
-                    </Text>
-                    <Text variant="secondary" width="150px" mr="15px">
-                        Borrowed
-                    </Text>
-                    <Text variant="secondary" width="150px">
-                        Value
-                    </Text>
+                        <Text variant="secondary" minWidth="150px" width="150px" mr="15px">
+                            Deposited
+                        </Text>
+                        <Text variant="secondary" minWidth="150px" width="150px" mr="15px">
+                            Borrowed
+                        </Text>
+                        <Text variant="secondary" minWidth="140px" width="150px">
+                            Value
+                        </Text>
+                    </Flex>
+                    {Object.entries(collaterals).map(([key, collateral]) => (
+                        <CollateralRow
+                            key={collateral.symbol}
+                            collateral={collateral}
+                            value={(
+                                collateralAmounts[collateral.symbol as keyof CollateralAmounts] *
+                                    futurePrices[collateral.symbol as keyof CollateralAmounts] -
+                                borrowAmounts[collateral.symbol as keyof CollateralAmounts] *
+                                    futurePrices[collateral.symbol as keyof CollateralAmounts]
+                            ).toFixed(2)}
+                            price={prices[collateral.symbol as keyof Prices]}
+                            futurePrice={futurePrices[collateral.symbol as keyof Prices]}
+                            liqPrice={calculateLiquidation(collateral.symbol)}
+                            onChangeCollateral={updateCollateralAmount}
+                            onChangeBorrow={updateBorrowAmount}
+                            onPriceChange={updatePriceAmount}
+                            onFuturePriceChange={updateFuturePriceAmount}
+                        />
+                    ))}
                 </Flex>
-                {Object.entries(collaterals).map(([key, collateral]) => (
-                    <CollateralRow
-                        key={collateral.symbol}
-                        collateral={collateral}
-                        value={(
-                            collateralAmounts[collateral.symbol as keyof CollateralAmounts] *
-                                futurePrices[collateral.symbol as keyof CollateralAmounts] -
-                            borrowAmounts[collateral.symbol as keyof CollateralAmounts] *
-                                futurePrices[collateral.symbol as keyof CollateralAmounts]
-                        ).toFixed(2)}
-                        price={prices[collateral.symbol as keyof Prices]}
-                        futurePrice={futurePrices[collateral.symbol as keyof Prices]}
-                        liqPrice={calculateLiquidation(collateral.symbol)}
-                        onChangeCollateral={updateCollateralAmount}
-                        onChangeBorrow={updateBorrowAmount}
-                        onPriceChange={updatePriceAmount}
-                        onFuturePriceChange={updateFuturePriceAmount}
-                    />
-                ))}
             </Accordion>
 
             <Accordion title="Perpetuals">
