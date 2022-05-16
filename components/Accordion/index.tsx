@@ -25,7 +25,7 @@ const Accordion = ({ title, children }: any) => {
                 overflow="hidden"
             >
                 {isOpen ? <FaChevronUp color="#fff" /> : <FaChevronDown color="#fff" />}
-                <Text variant="primary" ml="15px" fontSize="20px">
+                <Text variant="primary" ml="15px" fontSize="20px" fontWeight="600">
                     {title}
                 </Text>
             </Flex>

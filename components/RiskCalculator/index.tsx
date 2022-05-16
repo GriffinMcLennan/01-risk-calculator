@@ -36,6 +36,9 @@ interface Prices {
     AVAX: number;
     USDC: number;
     USDT: number;
+    SYN: number;
+    GMT: number;
+    SOL2: number;
     // UST: number;
 }
 
@@ -47,6 +50,9 @@ interface Markets {
     AVAX: number;
     APE: number;
     NEAR: number;
+    SYN: number;
+    GMT: number;
+    SOL2: number;
 }
 
 interface BorrowAmounts {
@@ -65,6 +71,9 @@ interface MarketAmounts {
     AVAX: number;
     APE: number;
     NEAR: number;
+    SYN: number;
+    GMT: number;
+    SOL2: number;
 }
 
 const RiskCalculator = () => {
@@ -81,6 +90,9 @@ const RiskCalculator = () => {
         AVAX: 0,
         USDC: 1,
         USDT: 1,
+        SYN: 0,
+        GMT: 0,
+        SOL2: 0,
         // UST: 1,
     });
 
@@ -95,7 +107,10 @@ const RiskCalculator = () => {
         AVAX: 0,
         USDC: 1,
         USDT: 1,
+        SYN: 0,
+        GMT: 0,
         // UST: 1,
+        SOL2: 0,
     });
 
     const [collateralAmounts, setCollateralAmounts] = useState<CollateralAmounts>({
@@ -126,6 +141,9 @@ const RiskCalculator = () => {
         AVAX: 0,
         APE: 0,
         NEAR: 0,
+        SYN: 0,
+        GMT: 0,
+        SOL2: 0,
     });
 
     // console.log("Collateral amounts:", collateralAmounts);
@@ -328,6 +346,9 @@ const RiskCalculator = () => {
                 AVAX: priceObj["avalanche-2"].usd,
                 USDC: 1,
                 USDT: 1,
+                SYN: priceObj["synapse-2"].usd,
+                GMT: priceObj["stepn"].usd,
+                SOL2: Number((priceObj["solana"].usd * priceObj["solana"].usd).toFixed(2)),
                 // UST: 1,
             });
 
@@ -342,6 +363,9 @@ const RiskCalculator = () => {
                 AVAX: priceObj["avalanche-2"].usd,
                 USDC: 1,
                 USDT: 1,
+                SYN: priceObj["synapse-2"].usd,
+                GMT: priceObj["stepn"].usd,
+                SOL2: Number((priceObj["solana"].usd * priceObj["solana"].usd).toFixed(2)),
                 // UST: 1,
             });
         };

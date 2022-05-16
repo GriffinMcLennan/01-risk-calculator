@@ -75,11 +75,27 @@ const nearMarket: Market = {
     imgURL: "/near.png",
 };
 
+const synMarket: Market = {
+    name: "Synapse",
+    baseIMF: 0.1,
+    baseMMF: 0.05,
+    symbol: "SYN",
+    imgURL: "/syn.webp",
+};
+
+const gmtMarket: Market = {
+    name: "StepN",
+    baseIMF: 0.1,
+    baseMMF: 0.05,
+    symbol: "GMT",
+    imgURL: "/gmt.webp",
+};
+
 const solSquaredMarket: Market = {
-    name: "Solana^2",
+    name: "Solana",
     baseIMF: 1,
     baseMMF: 0.5,
-    symbol: "SOL^2",
+    symbol: "SOL2",
     imgURL: "/solana.svg",
 };
 
@@ -90,6 +106,9 @@ interface Markets {
     AVAX: Market;
     APE: Market;
     NEAR: Market;
+    SYN: Market;
+    GMT: Market;
+    SOL2: Market;
 }
 
 const markets = {
@@ -100,7 +119,9 @@ const markets = {
     AVAX: avaxMarket,
     APE: apeMarket,
     NEAR: nearMarket,
-    // solSquaredMarket, TODO: FIX
+    SYN: synMarket,
+    GMT: gmtMarket,
+    SOL2: solSquaredMarket,
 };
 
 export type { Market, Markets };

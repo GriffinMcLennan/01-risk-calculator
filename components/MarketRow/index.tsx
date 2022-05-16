@@ -41,7 +41,11 @@ const MarketRow = ({
                     alt={market.symbol}
                 />
                 <Text variant="secondary" width="100px" ml="10px" mr="15px">
-                    {market.symbol}
+                    {market.symbol.charAt(market.symbol.length - 1) === "2"
+                        ? market.symbol.substring(0, market.symbol.length - 1)
+                        : market.symbol}
+
+                    {market.symbol.charAt(market.symbol.length - 1) === "2" && <sup>2</sup>}
                 </Text>
             </Flex>
 
