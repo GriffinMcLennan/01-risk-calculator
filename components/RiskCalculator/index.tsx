@@ -437,7 +437,7 @@ const RiskCalculator = () => {
                         <Text variant="secondary" minWidth="120px" width="120px" mr="15px">
                             Asset
                         </Text>
-                        <Text variant="secondary" minWidth="100px" width="100px" mr="15px">
+                        <Text variant="secondary" minWidth="100px" width="100px" ml="5px" mr="15px">
                             Entry Price
                         </Text>
                         <Text variant="secondary" minWidth="100px" width="100px" mr="15px">
