@@ -14,11 +14,11 @@ import theoreticalTotalNotionalValue from "../../math/theoreticalTotalNotionalVa
 import theoreticalMaintenanceMarginFactor from "../../math/theoreticalMaintenanceMarginFactor";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import chroma from "chroma-js";
+import { NO_LIQUIDATION_LONG, NO_LIQUIDATION_SHORT } from "../../constants/index";
 
 interface CollateralAmounts {
     USDC: number;
     USDT: number;
-    // UST: number;
     SOL: number;
     BTC: number;
     ETH: number;
@@ -28,7 +28,6 @@ interface CollateralAmounts {
 interface Prices {
     SOL: number;
     BTC: number;
-    // LUNA: number;
     APE: number;
     mSOL: number;
     NEAR: number;
@@ -39,14 +38,12 @@ interface Prices {
     SYN: number;
     GMT: number;
     SOL2: number;
-    // UST: number;
 }
 
 interface Markets {
     SOL: number;
     BTC: number;
     ETH: number;
-    // LUNA: number;
     AVAX: number;
     APE: number;
     NEAR: number;
@@ -78,11 +75,9 @@ interface MarketAmounts {
 
 const RiskCalculator = () => {
     const { textColors, colors } = useTheme();
-    // console.log("Here:", colors["red"]["50"]);
     const [prices, setPrices] = useState<Prices>({
         SOL: 0,
         BTC: 0,
-        // LUNA: 0,
         APE: 0,
         mSOL: 0,
         NEAR: 0,
@@ -93,13 +88,11 @@ const RiskCalculator = () => {
         SYN: 0,
         GMT: 0,
         SOL2: 0,
-        // UST: 1,
     });
 
     const [futurePrices, setFuturePrices] = useState<Prices>({
         SOL: 0,
         BTC: 0,
-        // LUNA: 0,
         APE: 0,
         mSOL: 0,
         NEAR: 0,
@@ -109,14 +102,12 @@ const RiskCalculator = () => {
         USDT: 1,
         SYN: 0,
         GMT: 0,
-        // UST: 1,
         SOL2: 0,
     });
 
     const [collateralAmounts, setCollateralAmounts] = useState<CollateralAmounts>({
         USDC: 0,
         USDT: 0,
-        // UST: 0,
         SOL: 0,
         BTC: 0,
         ETH: 0,
@@ -126,7 +117,6 @@ const RiskCalculator = () => {
     const [borrowAmounts, setBorrowAmounts] = useState<BorrowAmounts>({
         USDC: 0,
         USDT: 0,
-        // UST: 0,
         SOL: 0,
         BTC: 0,
         ETH: 0,
@@ -137,7 +127,6 @@ const RiskCalculator = () => {
         SOL: 0,
         BTC: 0,
         ETH: 0,
-        // LUNA: 0,
         AVAX: 0,
         APE: 0,
         NEAR: 0,
@@ -146,20 +135,13 @@ const RiskCalculator = () => {
         SOL2: 0,
     });
 
-    // console.log("Collateral amounts:", collateralAmounts);
-    // console.log("Borrow amounts:", borrowAmounts);
-    // console.log("Market amounts:", marketAmounts);
-
     const TAV = totalAccountValue(collateralAmounts, borrowAmounts, marketAmounts, prices, futurePrices);
     const TNV = totalNotionalValue(borrowAmounts, marketAmounts, futurePrices);
     const MF = TNV === 0 ? NaN : TAV / TNV;
 
-    // console.log(TAV, TNV, MF);
-
     const MMF = maintenanceMarginFactor(borrowAmounts, marketAmounts, futurePrices, TNV);
 
     const accountRisk = Math.abs((Math.log(Math.min(1, MF)) / Math.log(MMF)) * 100);
-    // console.log("MF, MMF, Account Risk:", MF, MMF, accountRisk);
 
     const calculateLiquidation = (key: string) => {
         let totalDirectional = 0;
@@ -172,11 +154,10 @@ const RiskCalculator = () => {
             totalDirectional -= borrowAmounts[key as keyof Collaterals];
         }
 
-        // changes in this token don't have any delta => impossible to liquidate
+        // changes in this token don't have any delta => impossible to liquidate or accountRisk >= 100: already liquidated
         if (totalDirectional === 0 || accountRisk >= 100) return -1;
 
-        // console.log("totalDirectional:", totalDirectional);
-
+        const isLong = totalDirectional > 0;
         let low = 0.0;
         let high = 1_000_000.0;
 
@@ -200,8 +181,6 @@ const RiskCalculator = () => {
                 theoreticalPrice
             );
 
-            // console.log("Price: ", theoreticalPrice, "TAV: ", theoreticalTAV, "TNV ", theoreticalTNV);
-
             const theoreticalMF = Math.min(1, Math.abs(theoreticalTAV / theoreticalTNV));
             const theoreticalMMF = theoreticalMaintenanceMarginFactor(
                 borrowAmounts,
@@ -212,25 +191,16 @@ const RiskCalculator = () => {
                 theoreticalPrice
             );
 
-            // console.log(
-            //     "Price: ",
-            //     theoreticalPrice,
-            //     "theoreticalMF: ",
-            //     Math.abs(theoreticalMF),
-            //     "TheoreticalMMF: ",
-            //     theoreticalMMF,
-            //     "Ratio: ",
-            //     theoreticalMF / theoreticalMMF
-            // );
-
+            // If below liquidation price then increase if long, decrease if short
             if (Math.abs(theoreticalMF) < Math.abs(theoreticalMMF)) {
-                if (totalDirectional > 0) {
+                if (isLong) {
                     low = theoreticalPrice;
                 } else {
                     high = theoreticalPrice;
                 }
             } else {
-                if (totalDirectional > 0) {
+                // greater than liquidation price: decrease if long, increase if short
+                if (isLong) {
                     high = theoreticalPrice;
                 } else {
                     low = theoreticalPrice;
@@ -238,7 +208,8 @@ const RiskCalculator = () => {
             }
         }
 
-        const delta = totalDirectional > 0 ? -0.01 : 0.01;
+        // check to see if the user will be liquidated or not
+        const delta = isLong ? -0.01 : 0.01;
 
         const theoreticalTAV = theoreticalTotalAccountValue(
             collateralAmounts,
@@ -269,22 +240,11 @@ const RiskCalculator = () => {
         );
 
         if (theoreticalMF > theoreticalMMF) {
-            return totalDirectional > 0 ? -1 : -2;
+            return isLong ? NO_LIQUIDATION_LONG : NO_LIQUIDATION_SHORT;
         }
 
         return low;
     };
-
-    // TODO: Add maximum price for liquidations... similar to -1 special value for no shortside liquidation
-
-    // console.log("SOL Liquidation:", calculateLiquidation("SOL"));
-    // console.log("BTC Liquidation:", calculateLiquidation("BTC"));
-    // console.log("ETH Liquidation:", calculateLiquidation("ETH"));
-    // console.log("mSOL Liquidation:", calculateLiquidation("mSOL"));
-    // console.log("LUNA Liquidation:", calculateLiquidation("LUNA"));
-    // console.log("AVAX Liquidation:", calculateLiquidation("AVAX"));
-    // console.log("APE Liquidation:", calculateLiquidation("APE"));
-    // console.log("NEAR Liquidation:", calculateLiquidation("NEAR"));
 
     const updateCollateralAmount = (key: string, newValue: number) => {
         const oldAmounts = { ...collateralAmounts };
@@ -338,7 +298,6 @@ const RiskCalculator = () => {
             setPrices({
                 SOL: priceObj["solana"].usd,
                 BTC: priceObj["bitcoin"].usd,
-                // LUNA: priceObj["terra-luna"].usd,
                 APE: priceObj["apecoin"].usd,
                 mSOL: priceObj["msol"].usd,
                 NEAR: priceObj["near"].usd,
@@ -349,13 +308,11 @@ const RiskCalculator = () => {
                 SYN: priceObj["synapse-2"].usd,
                 GMT: priceObj["stepn"].usd,
                 SOL2: Number((priceObj["solana"].usd * priceObj["solana"].usd).toFixed(2)),
-                // UST: 1,
             });
 
             setFuturePrices({
                 SOL: priceObj["solana"].usd,
                 BTC: priceObj["bitcoin"].usd,
-                // LUNA: priceObj["terra-luna"].usd,
                 APE: priceObj["apecoin"].usd,
                 mSOL: priceObj["msol"].usd,
                 NEAR: priceObj["near"].usd,
@@ -366,7 +323,6 @@ const RiskCalculator = () => {
                 SYN: priceObj["synapse-2"].usd,
                 GMT: priceObj["stepn"].usd,
                 SOL2: Number((priceObj["solana"].usd * priceObj["solana"].usd).toFixed(2)),
-                // UST: 1,
             });
         };
 

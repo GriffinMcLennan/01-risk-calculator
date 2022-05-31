@@ -2,7 +2,7 @@ interface Collateral {
     /** The symbol of the collateral */
     symbol: string;
 
-    /** Weight of the collateral for calculating the available margin */ //TODO
+    /** Weight of the collateral for calculating the available margin */
     weight: number;
 
     /** The maximum amount of the symbol that may be deposited into 01 exchange */

@@ -2,6 +2,7 @@ import { Image, Flex, Input, Text, useTheme } from "@chakra-ui/react";
 import { useState } from "react";
 import NumberFormat from "react-number-format";
 import { Market } from "../../data/markets";
+import { NO_LIQUIDATION_LONG, NO_LIQUIDATION_SHORT } from "../../constants/index";
 
 interface Props {
     market: Market;
@@ -84,9 +85,15 @@ const MarketRow = ({
                 mr="15px"
                 width="145px"
                 minWidth="145px"
-                prefix={liqPrice === -2 ? "> " : ""}
-                suffix={liqPrice === -2 ? " Mill" : ""}
-                value={liqPrice === -1 ? "" : liqPrice === -2 ? "1" : liqPrice.toFixed(2)}
+                prefix={liqPrice === NO_LIQUIDATION_SHORT ? "> " : ""}
+                suffix={liqPrice === NO_LIQUIDATION_SHORT ? " Mill" : ""}
+                value={
+                    liqPrice === NO_LIQUIDATION_LONG
+                        ? ""
+                        : liqPrice === NO_LIQUIDATION_SHORT
+                        ? "1" // it's placed between ">" and "Mill" => "> 1 Mill"
+                        : liqPrice.toFixed(2)
+                }
                 placeholder="-"
             />
 

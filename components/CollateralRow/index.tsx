@@ -3,6 +3,7 @@ import { Collateral } from "../../data/collaterals";
 import NumberFormat from "react-number-format";
 import { useState } from "react";
 import { useTheme } from "@chakra-ui/react";
+import { NO_LIQUIDATION_LONG, NO_LIQUIDATION_SHORT } from "../../constants/index";
 
 interface Props {
     collateral: Collateral;
@@ -82,9 +83,15 @@ const CollateralRow = ({
                 mr="15px"
                 color={textColors.secondary}
                 disabled
-                prefix={liqPrice === -2 ? "> " : ""}
-                suffix={liqPrice === -2 ? " Mill" : ""}
-                value={liqPrice === -1 ? "" : liqPrice === -2 ? "1" : liqPrice.toFixed(2)}
+                prefix={liqPrice === NO_LIQUIDATION_SHORT ? "> " : ""}
+                suffix={liqPrice === NO_LIQUIDATION_SHORT ? " Mill" : ""}
+                value={
+                    liqPrice === NO_LIQUIDATION_LONG
+                        ? ""
+                        : liqPrice === NO_LIQUIDATION_SHORT
+                        ? "1" // it's placed between ">" and "Mill" => "> 1 Mill"
+                        : liqPrice.toFixed(2)
+                }
                 placeholder="-"
                 thousandSeparator
             />

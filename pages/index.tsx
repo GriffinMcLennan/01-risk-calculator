@@ -15,7 +15,7 @@ const Home: NextPage = () => {
         >
             <Head>
                 <title>01 Risk Calculator</title>
-                <meta name="description" content="Calculate the theoretical risk of your account" /> {/* TODO */}
+                <meta name="description" content="Calculate the theoretical risk of your account" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
